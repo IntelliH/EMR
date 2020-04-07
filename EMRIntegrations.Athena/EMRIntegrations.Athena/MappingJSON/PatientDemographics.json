@@ -1,0 +1,18 @@
+{
+  "Title": "pprefix",
+  "Suffix": "psuffix",
+  "FirstName": "pfname",
+  "MiddleName": "pminit",
+  "LastName": "plname",
+  "Email": "pemail",
+  "DateOfBirth": "pdob",
+  "Gender": "psex",
+  "Phone": "phomephn",
+  "EthnicityCode": "ethnicity",
+  "RaceCode": "prace",
+  "Address1": "paddr1",
+  "Address2": "paddr2",
+  "City": "pcity",
+  "State": "pstate",
+  "SSN": "pssn"
+}
