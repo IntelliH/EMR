@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2016
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMRIntegrations.Core", "EMRIntegrations.Core\EMRIntegrations.Core.csproj", "{7B817F15-A010-48D3-8681-538007EC64C9}"
 EndProject
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMRIntegrations.CernerMillenium", "EMRIntegrations.CernerMillenium\EMRIntegrations.CernerMillenium.csproj", "{9DC85D5D-1A40-48FA-BFDB-5F7FDA7EF91D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMRIntegrations.Epic", "EMRIntegrations.Epic\EMRIntegrations.Epic.csproj", "{178030DB-A0C6-4321-AFF9-949AE0DBD46B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMRIntegrations.DrChrono", "EMRIntegrations.DrChrono\EMRIntegrations.DrChrono.csproj", "{14577768-7066-4F15-B93C-A00B0FA4CC40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMRIntegrations.EpicR4", "EMRIntegrations.EpicR4\EMRIntegrations.EpicR4.csproj", "{7939AA44-8821-4945-8329-8A61EB20AF18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{178030DB-A0C6-4321-AFF9-949AE0DBD46B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{178030DB-A0C6-4321-AFF9-949AE0DBD46B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{178030DB-A0C6-4321-AFF9-949AE0DBD46B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14577768-7066-4F15-B93C-A00B0FA4CC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14577768-7066-4F15-B93C-A00B0FA4CC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14577768-7066-4F15-B93C-A00B0FA4CC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14577768-7066-4F15-B93C-A00B0FA4CC40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7939AA44-8821-4945-8329-8A61EB20AF18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7939AA44-8821-4945-8329-8A61EB20AF18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7939AA44-8821-4945-8329-8A61EB20AF18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7939AA44-8821-4945-8329-8A61EB20AF18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -34,23 +34,23 @@
     <Reference Include="FluentAssertions, Version=5.9.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.5.9.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="Hl7.Fhir.DSTU2.Core, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.DSTU2.1.4.0\lib\net45\Hl7.Fhir.DSTU2.Core.dll</HintPath>
+    <Reference Include="Hl7.Fhir.DSTU2.Core, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hl7.Fhir.DSTU2.1.8.0\lib\net45\Hl7.Fhir.DSTU2.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Hl7.Fhir.ElementModel, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.ElementModel.1.4.0\lib\net45\Hl7.Fhir.ElementModel.dll</HintPath>
+    <Reference Include="Hl7.Fhir.ElementModel, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hl7.Fhir.ElementModel.1.8.0\lib\net45\Hl7.Fhir.ElementModel.dll</HintPath>
     </Reference>
-    <Reference Include="Hl7.Fhir.Serialization, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.Serialization.1.4.0\lib\net45\Hl7.Fhir.Serialization.dll</HintPath>
+    <Reference Include="Hl7.Fhir.Serialization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hl7.Fhir.Serialization.1.8.0\lib\net45\Hl7.Fhir.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Hl7.Fhir.Support, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.Support.1.4.0\lib\net45\Hl7.Fhir.Support.dll</HintPath>
+    <Reference Include="Hl7.Fhir.Support, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hl7.Fhir.Support.1.8.0\lib\net45\Hl7.Fhir.Support.dll</HintPath>
     </Reference>
-    <Reference Include="Hl7.Fhir.Support.Poco, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.Support.Poco.1.4.0\lib\net45\Hl7.Fhir.Support.Poco.dll</HintPath>
+    <Reference Include="Hl7.Fhir.Support.Poco, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hl7.Fhir.Support.Poco.1.8.0\lib\net45\Hl7.Fhir.Support.Poco.dll</HintPath>
     </Reference>
-    <Reference Include="Hl7.FhirPath, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.FhirPath.1.4.0\lib\net45\Hl7.FhirPath.dll</HintPath>
+    <Reference Include="Hl7.FhirPath, Version=1.8.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hl7.FhirPath.1.8.0\lib\net45\Hl7.FhirPath.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>

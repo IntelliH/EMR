@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
-namespace EMRIntegrations.Epic.ModuleClasses
+namespace EMRIntegrations.EpicR4.ModuleClasses
 {
     class Allergy
     {
@@ -71,43 +71,43 @@ namespace EMRIntegrations.Epic.ModuleClasses
 
                         var allergyIntolerance = fhirClient.Read<AllergyIntolerance>("AllergyIntolerance/" + entry.Resource.Id);
 
-                        if (allergyIntolerance.Reaction != null && allergyIntolerance.Reaction.Count > 0)
-                        {
-                            foreach (var item in allergyIntolerance.Reaction)
-                            {
-                                DataRow dRowAllergy = dtAllergy.NewRow();
+                        //if (allergyIntolerance.Reaction != null && allergyIntolerance.Reaction.Count > 0)
+                        //{
+                        //    foreach (var item in allergyIntolerance.Reaction)
+                        //    {
+                        //        DataRow dRowAllergy = dtAllergy.NewRow();
 
-                                dRowAllergy["Allergicto"] = allergyIntolerance.Substance.Text;
-                                dRowAllergy["Allergenid"] = allergyIntolerance.Id;
-                                dRowAllergy["Reaction"] = item.Substance == null ? (item.Manifestation[0].Text == null ? string.Empty : item.Manifestation[0].Text) : item.Substance.Text;
-                                dRowAllergy["Note"] = allergyIntolerance.Note == null ? string.Empty : allergyIntolerance.Note.Text;
-                                dRowAllergy["Onsetdate"] = allergyIntolerance.RecordedDate;
-                                dRowAllergy["PatientID"] = parameters["patientid"].ToString();
-                                dRowAllergy["admitflag"] = "1";
-                                dRowAllergy["daterecorded"] = allergyIntolerance.RecordedDate;
+                        //        dRowAllergy["Allergicto"] = allergyIntolerance.Substance.Text;
+                        //        dRowAllergy["Allergenid"] = allergyIntolerance.Id;
+                        //        dRowAllergy["Reaction"] = item.Substance == null? (item.Manifestation[0].Text == null ? string.Empty : item.Manifestation[0].Text) : item.Substance.Text;
+                        //        dRowAllergy["Note"] = allergyIntolerance.Note == null ? string.Empty : allergyIntolerance.Note.Text;
+                        //        dRowAllergy["Onsetdate"] = allergyIntolerance.RecordedDate;
+                        //        dRowAllergy["PatientID"] = parameters["patientid"].ToString();
+                        //        dRowAllergy["admitflag"] = "1";
+                        //        dRowAllergy["daterecorded"] = allergyIntolerance.RecordedDate;
 
-                                if (item.Severity != null)
-                                {
-                                    dRowAllergy["Severity"] = item.Severity.Value;
-                                }
+                        //        if (item.Severity != null)
+                        //        {
+                        //            dRowAllergy["Severity"] = item.Severity.Value;
+                        //        }
 
-                                dtAllergy.Rows.Add(dRowAllergy);
-                            }
-                        }
-                        else
-                        {
-                            DataRow dRowAllergy = dtAllergy.NewRow();
+                        //        dtAllergy.Rows.Add(dRowAllergy);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    DataRow dRowAllergy = dtAllergy.NewRow();
 
-                            dRowAllergy["Allergicto"] = allergyIntolerance.Substance.Text;
-                            dRowAllergy["Allergenid"] = allergyIntolerance.Id;
-                            dRowAllergy["Note"] = allergyIntolerance.Note == null ? string.Empty : allergyIntolerance.Note.Text;
-                            dRowAllergy["Onsetdate"] = allergyIntolerance.RecordedDate;
-                            dRowAllergy["PatientID"] = parameters["patientid"].ToString();
-                            dRowAllergy["admitflag"] = "1";
-                            dRowAllergy["daterecorded"] = allergyIntolerance.RecordedDate;
+                        //    dRowAllergy["Allergicto"] = allergyIntolerance.Substance.Text;
+                        //    dRowAllergy["Allergenid"] = allergyIntolerance.Id;
+                        //    dRowAllergy["Note"] = allergyIntolerance.Note == null ? string.Empty : allergyIntolerance.Note.Text;
+                        //    dRowAllergy["Onsetdate"] = allergyIntolerance.RecordedDate;
+                        //    dRowAllergy["PatientID"] = parameters["patientid"].ToString();
+                        //    dRowAllergy["admitflag"] = "1";
+                        //    dRowAllergy["daterecorded"] = allergyIntolerance.RecordedDate;
 
-                            dtAllergy.Rows.Add(dRowAllergy);
-                        }
+                        //    dtAllergy.Rows.Add(dRowAllergy);
+                        //}
                     }
                     catch (Exception)
                     {

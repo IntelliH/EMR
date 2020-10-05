@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EMRIntegrations.Epic")]
+[assembly: AssemblyTitle("EMRIntegrations.DrChrono")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EMRIntegrations.Epic")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyProduct("EMRIntegrations.DrChrono")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9dc85d5d-1a40-48fa-bfdb-5f7fda7ef91d")]
+[assembly: Guid("2c6fe4cd-5cfe-45c6-b756-9e5b7f9c8745")]
 
 // Version information for an assembly consists of the following four values:
 //

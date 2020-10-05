@@ -39,7 +39,9 @@ namespace EMRIntegrations.CernerMillenium.ModuleClasses
                 dtPatientDemographics.Columns.Add("Gender");
                 dtPatientDemographics.Columns.Add("Phone");
                 dtPatientDemographics.Columns.Add("EthnicityCode");
+                dtPatientDemographics.Columns.Add("Ethnicity");
                 dtPatientDemographics.Columns.Add("RaceCode");
+                dtPatientDemographics.Columns.Add("Race");
                 dtPatientDemographics.Columns.Add("Address1");
                 dtPatientDemographics.Columns.Add("Address2");
                 dtPatientDemographics.Columns.Add("City");
@@ -246,7 +248,7 @@ namespace EMRIntegrations.CernerMillenium.ModuleClasses
                 JSONString.Append("\"Address1\":" + "\"" + drow["Address1"].ToString() + "\",");
                 JSONString.Append("\"Address2\":" + "\"" + drow["Address2"].ToString() + "\",");
                 JSONString.Append("\"SSN\":" + "\"" + drow["SSN"].ToString() + "\",");
-                JSONString.Append("\"MRN\":" + "\"\",");
+                JSONString.Append("\"MRN\":" + "\"" + emrpatientid + "\",");
                 JSONString.Append("\"State\":" + "\"" + drow["State"].ToString() + "\",");
                 JSONString.Append("\"Password\":" + "\"\",");
                 JSONString.Append("\"Role\":" + "\"\",");
@@ -255,8 +257,10 @@ namespace EMRIntegrations.CernerMillenium.ModuleClasses
                 JSONString.Append("\"weight\":" + "\"\",");
                 JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
                 JSONString.Append("\"StateId\":" + "\"\",");
-                JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
-                JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
+                JSONString.Append("\"EthnicityCode\":" + "\"\",");
+                JSONString.Append("\"Ethnicity\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
+                JSONString.Append("\"RaceCode\":" + "\"\",");
+                JSONString.Append("\"Race\":" + "\"" + drow["RaceCode"].ToString() + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
                 JSONString.Append("\"POSCode\":" + "\"\"");

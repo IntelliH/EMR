@@ -6,7 +6,7 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 
-namespace EMRIntegrations.Epic.ModuleClasses
+namespace EMRIntegrations.EpicR4.ModuleClasses
 {
     class PatientDemographics
     {
@@ -39,9 +39,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 dtPatientDemographics.Columns.Add("Gender");
                 dtPatientDemographics.Columns.Add("Phone");
                 dtPatientDemographics.Columns.Add("EthnicityCode");
-                dtPatientDemographics.Columns.Add("Ethnicity");
                 dtPatientDemographics.Columns.Add("RaceCode");
-                dtPatientDemographics.Columns.Add("Race");
                 dtPatientDemographics.Columns.Add("Address1");
                 dtPatientDemographics.Columns.Add("Address2");
                 dtPatientDemographics.Columns.Add("City");
@@ -49,10 +47,20 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 dtPatientDemographics.Columns.Add("ZipCode");
                 dtPatientDemographics.Columns.Add("SSN");
 
+                // Set up FHIR Client for Cerner Sandbox
+
+                //var fhirClient = new FhirClient("https://fhir-open.sandboxcernerpowerchart.com/may2015/d075cf8b-3261-481d-97e5-ba6c48d3b41f");
+
                 var fhirClient = new FhirClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2");
 
                 fhirClient.UseFormatParam = true;
+
                 fhirClient.PreferredFormat = ResourceFormat.Json;
+
+                //fhirClient.Search<MedicationOrder>(SearchParams.d)
+
+                //var mySearch = new SearchParams();
+                //mySearch.Parameters.Add(new Tuple<string, string>("patient", "4342010"));
 
                 // Read Patient #1
                 Patient objPatient = new Patient();
@@ -85,10 +93,13 @@ namespace EMRIntegrations.Epic.ModuleClasses
                         }
                         dRowPatientDemographics["Title"] = dRowPatientDemographics["Title"].ToString().Trim();
 
-                        foreach (Hl7.Fhir.Model.FhirString item in Name.FamilyElement)
-                        {
-                            dRowPatientDemographics["LastName"] += item.Value + " ";
-                        }
+                        //foreach (Hl7.Fhir.Model.FhirString item in Name.FamilyElement)
+                        //{
+                        //    dRowPatientDemographics["LastName"] += item.Value + " ";
+                        //}
+
+                        dRowPatientDemographics["LastName"] = Name.Family;
+
                         dRowPatientDemographics["LastName"] = dRowPatientDemographics["LastName"].ToString().Trim();
 
                         foreach (Hl7.Fhir.Model.FhirString item in Name.GivenElement)
@@ -143,7 +154,6 @@ namespace EMRIntegrations.Epic.ModuleClasses
                             foreach (var item in ((Hl7.Fhir.Model.CodeableConcept)extension.Value).Coding)
                             {
                                 dRowPatientDemographics["RaceCode"] = item.Code;
-                                dRowPatientDemographics["Race"] = item.Display;
                             }
                         }
                     }
@@ -154,7 +164,6 @@ namespace EMRIntegrations.Epic.ModuleClasses
                             foreach (var item in ((Hl7.Fhir.Model.CodeableConcept)extension.Value).Coding)
                             {
                                 dRowPatientDemographics["EthnicityCode"] = item.Code;
-                                dRowPatientDemographics["Ethnicity"] = item.Display;
                             }
                         }
                     }
@@ -247,7 +256,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 JSONString.Append("\"Address1\":" + "\"" + drow["Address1"].ToString() + "\",");
                 JSONString.Append("\"Address2\":" + "\"" + drow["Address2"].ToString() + "\",");
                 JSONString.Append("\"SSN\":" + "\"" + drow["SSN"].ToString() + "\",");
-                JSONString.Append("\"MRN\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"MRN\":" + "\"\",");
                 JSONString.Append("\"State\":" + "\"" + drow["State"].ToString() + "\",");
                 JSONString.Append("\"Password\":" + "\"\",");
                 JSONString.Append("\"Role\":" + "\"\",");
@@ -257,9 +266,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
                 JSONString.Append("\"StateId\":" + "\"\",");
                 JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
-                JSONString.Append("\"Ethnicity\":" + "\"" + drow["Ethnicity"].ToString() + "\",");
                 JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
-                JSONString.Append("\"Race\":" + "\"" + drow["Race"].ToString() + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
                 JSONString.Append("\"POSCode\":" + "\"\"");

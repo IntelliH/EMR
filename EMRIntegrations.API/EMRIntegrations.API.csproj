@@ -48,24 +48,6 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Hl7.Fhir.DSTU2.Core, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.DSTU2.1.4.0\lib\net45\Hl7.Fhir.DSTU2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.Fhir.ElementModel, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.ElementModel.1.4.0\lib\net45\Hl7.Fhir.ElementModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.Fhir.Serialization, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.Serialization.1.4.0\lib\net45\Hl7.Fhir.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.Fhir.Support, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.Support.1.4.0\lib\net45\Hl7.Fhir.Support.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.Fhir.Support.Poco, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.Fhir.Support.Poco.1.4.0\lib\net45\Hl7.Fhir.Support.Poco.dll</HintPath>
-    </Reference>
-    <Reference Include="Hl7.FhirPath, Version=1.4.0.0, Culture=neutral, PublicKeyToken=d706911480550fc3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Hl7.FhirPath.1.4.0\lib\net45\Hl7.FhirPath.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -100,8 +82,8 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -323,6 +305,14 @@
     <ProjectReference Include="..\EMRIntegrations.Data\EMRIntegrations.Data.csproj">
       <Project>{5194af85-1d1d-4df0-9d10-b8e599953fb9}</Project>
       <Name>EMRIntegrations.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EMRIntegrations.DrChrono\EMRIntegrations.DrChrono.csproj">
+      <Project>{14577768-7066-4f15-b93c-a00b0fa4cc40}</Project>
+      <Name>EMRIntegrations.DrChrono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EMRIntegrations.EpicR4\EMRIntegrations.EpicR4.csproj">
+      <Project>{7939aa44-8821-4945-8329-8a61eb20af18}</Project>
+      <Name>EMRIntegrations.EpicR4</Name>
     </ProjectReference>
     <ProjectReference Include="..\EMRIntegrations.Epic\EMRIntegrations.Epic.csproj">
       <Project>{178030db-a0c6-4321-aff9-949ae0dbd46b}</Project>

@@ -311,124 +311,76 @@ namespace EMRIntegrations.Athena
                             dr["pstatus"] = "A";
                         }
 
-                        //if (!string.IsNullOrEmpty(dr["pdob"].ToString()))
-                        //{
-                        //    dobdate = dr["pdob"].ToString(); // objCommonCleanup.ParseDateFromString(dr["pdob"].ToString(), "yyyyMMdd");
-
-                        //    if (string.IsNullOrEmpty(dobdate))
-                        //    {
-                        //        dr["comments"] = "Patient DOB: " + dr["pdob"].ToString();
-                        //        dr["pdob"] = string.Empty;
-                        //    }
-                        //    else
-                        //    {
-                        //        //DateTime.Compare()
-                        //        var date = new DateTime(Convert.ToInt32(dobdate.Substring(0, 4)), Convert.ToInt32(dobdate.Substring(4, 2)), Convert.ToInt32(dobdate.Substring(6, 2)), 0, 0, 0);
-
-                        //        if (date > DateTime.Now)
-                        //        {
-                        //            dr["pdob"] = string.Empty;
-                        //        }
-                        //        else
-                        //        {
-                        //            dr["pdob"] = dobdate;
-                        //        }
-                        //    }
-                        //}
-
-                        //if (!string.IsNullOrEmpty(dr["gdob"].ToString()))
-                        //{
-                        //    dobdate = dr["gdob"].ToString(); // objCommonCleanup.ParseDateFromString(dr["gdob"].ToString(), "yyyyMMdd");
-
-                        //    if (string.IsNullOrEmpty(dobdate))
-                        //    {
-                        //        dr["comments"] = "Guarantor DOB: " + dr["gdob"].ToString();
-                        //        dr["gdob"] = string.Empty;
-                        //    }
-                        //    else
-                        //    {
-                        //        var date = new DateTime(Convert.ToInt32(dobdate.Substring(0, 4)), Convert.ToInt32(dobdate.Substring(4, 2)), Convert.ToInt32(dobdate.Substring(6, 2)), 0, 0, 0);
-                        //        if (date > DateTime.Now)
-                        //        {
-                        //            dr["gdob"] = string.Empty;
-                        //        }
-                        //        else
-                        //        {
-                        //            dr["gdob"] = dobdate;
-                        //        }
-                        //    }
-                        //}
-
                         string strethnicity = string.Empty;
                         if (dr["ethnicitycode"].ToString() == "2135-2")
                         {
                             strethnicity = @"Hispanic or Latino\/Spanish";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2137 -8")
+                        else if (dr["ethnicitycode"].ToString() == "2137-8")
                         {
                             strethnicity = "Spaniard";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2138 -6")
+                        else if (dr["ethnicitycode"].ToString() == "2138-6")
                         {
                             strethnicity = "Andalusian";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2139 -4")
+                        else if (dr["ethnicitycode"].ToString() == "2139-4")
                         {
                             strethnicity = "Asturian";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2140 -2")
+                        else if (dr["ethnicitycode"].ToString() == "2140-2")
                         {
                             strethnicity = "Castillian";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2141 -0")
+                        else if (dr["ethnicitycode"].ToString() == "2141-0")
                         {
                             strethnicity = "Catalonian";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2142 -8")
+                        else if (dr["ethnicitycode"].ToString() == "2142-8")
                         {
                             strethnicity = "Belearic Islander";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2143 -6")
+                        else if (dr["ethnicitycode"].ToString() == "2143-6")
                         {
                             strethnicity = "Gallego";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2144 -4")
+                        else if (dr["ethnicitycode"].ToString() == "2144-4")
                         {
                             strethnicity = "Valencian";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2145 -1")
+                        else if (dr["ethnicitycode"].ToString() == "2145-1")
                         {
                             strethnicity = "Canarian";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2146 -9")
+                        else if (dr["ethnicitycode"].ToString() == "2146-9")
                         {
                             strethnicity = "Spanish Basque";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2148 -5")
+                        else if (dr["ethnicitycode"].ToString() == "2148-5")
                         {
                             strethnicity = "Mexican";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2149 -3")
+                        else if (dr["ethnicitycode"].ToString() == "2149-3")
                         {
                             strethnicity = "Mexican American";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2150 -1")
+                        else if (dr["ethnicitycode"].ToString() == "2150-1")
                         {
                             strethnicity = "Mexicano";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2151 -9")
+                        else if (dr["ethnicitycode"].ToString() == "2151-9")
                         {
                             strethnicity = "Chicano";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2152 -7")
+                        else if (dr["ethnicitycode"].ToString() == "2152-7")
                         {
                             strethnicity = "La Raza";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2153 -5")
+                        else if (dr["ethnicitycode"].ToString() == "2153-5")
                         {
                             strethnicity = "Mexican American Indian";
                         }
-                        else if (dr["ethnicitycode"].ToString() == "2155 -0")
+                        else if (dr["ethnicitycode"].ToString() == "2155-0")
                         {
                             strethnicity = "Central American";
                         }
@@ -546,7 +498,7 @@ namespace EMRIntegrations.Athena
                             dr["original_ethnicity"] = dr["ethnicitycode"].ToString();
                         }
 
-                        dr["ethnicity"] = strethnicity;
+                        dr["ethnicity"] = dr["ethnicitycode"].ToString();
                     }
                 }
                 dtClinicaldata.TableName = strModuleName;
@@ -982,7 +934,7 @@ namespace EMRIntegrations.Athena
                 JSONString.Append("\"Address1\":" + "\"" + drow["Address1"].ToString() + "\",");
                 JSONString.Append("\"Address2\":" + "\"" + drow["Address2"].ToString() + "\",");
                 JSONString.Append("\"SSN\":" + "\"" + drow["SSN"].ToString() + "\",");
-                JSONString.Append("\"MRN\":" + "\"\",");
+                JSONString.Append("\"MRN\":" + "\"" + emrpatientid + "\",");
                 JSONString.Append("\"State\":" + "\"" + drow["State"].ToString() + "\",");
                 JSONString.Append("\"Password\":" + "\"\",");
                 JSONString.Append("\"Role\":" + "\"\",");
@@ -992,7 +944,9 @@ namespace EMRIntegrations.Athena
                 JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
                 JSONString.Append("\"StateId\":" + "\"\",");
                 JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
-                JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
+                JSONString.Append("\"Ethnicity\":" + "\"" + drow["Original_Ethnicity"].ToString() + "\",");
+                JSONString.Append("\"RaceCode\":" + "\"\",");
+                JSONString.Append("\"Race\":" + "\"" + drow["RaceCode"].ToString() + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
                 JSONString.Append("\"POSCode\":" + "\"\"");

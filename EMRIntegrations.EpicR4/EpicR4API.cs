@@ -1,11 +1,11 @@
-﻿using EMRIntegrations.Epic.ModuleClasses;
+﻿using EMRIntegrations.EpicR4.ModuleClasses;
 using System;
 using System.Collections;
 using System.Data;
 
-namespace EMRIntegrations.Epic
+namespace EMRIntegrations.EpicR4
 {
-    public class EpicAPI
+    public class EpicR4API
     {
         Hashtable parameters = new Hashtable();
 
@@ -153,54 +153,6 @@ namespace EMRIntegrations.Epic
             {
                 Allergy objAllergy = new Allergy();
                 string JSONString = objAllergy.GenerateAPIJSONString(dtAllergy, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
-                return JSONString;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        #endregion
-
-        #region Get Patient Vitals
-        public DataTable GetVitals(string patientid, string stagingdbconnectionstring, string requestid)
-        {
-            try
-            {
-                DataTable dtMedicationData = new DataTable();
-
-                parameters["patientid"] = patientid;
-
-                Vitals objVitals = new Vitals();
-                dtMedicationData = objVitals.GetData(parameters);
-
-                return dtMedicationData;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public void SaveVitals(DataTable dtVitals, string stagingdbconnectionstring, string requestid)
-        {
-            try
-            {
-                Common objCommon = new Common();
-                objCommon.InsertRecords(dtVitals, "Epic.Vitals", stagingdbconnectionstring, requestid);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public string GetJSONVitals(DataTable dtVitals, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)
-        {
-            try
-            {
-                Vitals objVitals = new Vitals();
-                string JSONString = objVitals.GenerateAPIJSONString(dtVitals, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                 return JSONString;
             }
             catch (Exception)

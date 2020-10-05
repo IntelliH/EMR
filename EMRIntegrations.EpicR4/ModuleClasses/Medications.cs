@@ -7,7 +7,7 @@ using System.Data;
 using System.Globalization;
 using System.Text;
 
-namespace EMRIntegrations.Epic.ModuleClasses
+namespace EMRIntegrations.EpicR4.ModuleClasses
 {
     class Medications
     {
@@ -97,18 +97,112 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 try
                 {
                     #region DSTU2
-                    var fhirClient = new FhirClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2");
+                    //var fhirClient = new FhirClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2");
+
+                    //fhirClient.UseFormatParam = true;
+
+                    //fhirClient.PreferredFormat = ResourceFormat.Json;
+
+                    ////Query the fhir server with search parameters, we will retrieve a bundle
+                    //var searchResultResponse = fhirClient.Search<MedicationOrder>(mySearch);
+
+                    ////var searchResultResponse = fhirClient.Read<MedicationOrder>("MedicationOrder/4342010");
+
+                    ////return new List<Medication>();
+
+                    //List<Medication> objlist = new List<Medication>();
+
+                    //foreach (Bundle.EntryComponent entry in searchResultResponse.Entry)
+                    //{
+                    //    try
+                    //    {
+                    //        if (entry.FullUrl == null)
+                    //        {
+                    //            return dtMedications;
+                    //        }
+
+                    //        var medOrders = fhirClient.Read<MedicationOrder>("MedicationOrder/" + entry.Resource.Id);
+                    //        //var safeCast = (medOrders?.Medication as ResourceReference)?.Reference;
+                    //        //if (string.IsNullOrWhiteSpace(safeCast))
+                    //        //{
+                    //        //    //return null;
+                    //        //}
+                    //        //else
+                    //        //{
+                    //        DataRow dRowMedication = dtMedications.NewRow();
+                    //        dRowMedication["CreatedBy"] = medOrders.Prescriber.Display;
+                    //        dRowMedication["MedicationId"] = medOrders.Id;
+
+                    //        try
+                    //        {
+                    //            dRowMedication["MedicationName"] = ((Hl7.Fhir.Model.CodeableConcept)medOrders.Medication).Text;
+                    //        }
+                    //        catch (Exception)
+                    //        {
+                    //            dRowMedication["MedicationName"] = ((Hl7.Fhir.Model.ResourceReference)medOrders.Medication).Display;
+                    //        }
+
+                    //        dRowMedication["Direction"] = medOrders.DosageInstruction[0].Text;
+
+                    //        if (medOrders.DosageInstruction[0].Timing.Repeat != null)
+                    //        {
+                    //            dRowMedication["DosageFrequencyValue"] = medOrders.DosageInstruction[0].Timing.Repeat.Period.ToString();
+                    //            dRowMedication["DosageFrequencyUnit"] = medOrders.DosageInstruction[0].Timing.Repeat.PeriodUnits.ToString();
+                    //        }
+
+                    //        if (medOrders.DosageInstruction[0].Route != null)
+                    //        {
+                    //            dRowMedication["DosageRoute"] = medOrders.DosageInstruction[0].Route.Coding[0].Display;
+                    //        }
+
+                    //        if (medOrders.DosageInstruction[0].AdditionalInstructions != null)
+                    //        {
+                    //            dRowMedication["DosageAdditionalInstructions"] = medOrders.DosageInstruction[0].AdditionalInstructions.Text;
+                    //        }
+
+                    //        if ((Hl7.Fhir.Model.Quantity)medOrders.DosageInstruction[0].Dose != null)
+                    //        {
+                    //            dRowMedication["DosageUnit"] = ((Hl7.Fhir.Model.Quantity)medOrders.DosageInstruction[0].Dose).Unit;
+                    //            dRowMedication["DosageQuantity"] = ((Hl7.Fhir.Model.Quantity)medOrders.DosageInstruction[0].Dose).Value;
+                    //        }
+
+                    //        dRowMedication["DosageFrequencyDescription"] = string.Empty;
+                    //        dRowMedication["DosageDurationUnit"] = medOrders.DispenseRequest.ExpectedSupplyDuration;
+
+                    //        if (medOrders.DosageInstruction[0].Timing.Repeat != null)
+                    //        {
+                    //            dRowMedication["StopDate"] = ((Hl7.Fhir.Model.Period)(medOrders.DosageInstruction[0].Timing.Repeat.Bounds)).End == null ? string.Empty : DateFormatMMDDYYYY(((Hl7.Fhir.Model.Period)(medOrders.DosageInstruction[0].Timing.Repeat.Bounds)).End);
+                    //            dRowMedication["StartDate"] = ((Hl7.Fhir.Model.Period)(medOrders.DosageInstruction[0].Timing.Repeat.Bounds)).Start == null ? string.Empty : DateFormatMMDDYYYY(((Hl7.Fhir.Model.Period)(medOrders.DosageInstruction[0].Timing.Repeat.Bounds)).Start);
+                    //        }
+
+                    //        dRowMedication["EnterDate"] = medOrders.DateWritten == null ? string.Empty : DateFormatMMDDYYYY(medOrders.DateWritten);
+
+                    //        dtMedications.Rows.Add(dRowMedication);
+
+                    //        //string MedicationName = medOrders.Medication.ToString();
+
+                    //        //var Medication = fhirClient.Read<Medication>("Medication/" + safeCast);
+                    //        //objlist.Add(Medication);
+                    //        //}
+                    //    }
+                    //    catch (Exception)
+                    //    {
+                    //        throw;
+                    //    }
+                    //}
+
+                    //return dtMedications;
+                    #endregion
+
+                    #region R4
+                    var fhirClient = new FhirClient("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/");
 
                     fhirClient.UseFormatParam = true;
 
                     fhirClient.PreferredFormat = ResourceFormat.Json;
 
                     //Query the fhir server with search parameters, we will retrieve a bundle
-                    var searchResultResponse = fhirClient.Search<MedicationOrder>(mySearch);
-
-                    //var searchResultResponse = fhirClient.Read<MedicationOrder>("MedicationOrder/4342010");
-
-                    //return new List<Medication>();
+                    var searchResultResponse = fhirClient.Search<MedicationRequest>(mySearch);
 
                     List<Medication> objlist = new List<Medication>();
 
@@ -121,7 +215,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                                 return dtMedications;
                             }
 
-                            var medOrders = fhirClient.Read<MedicationOrder>("MedicationOrder/" + entry.Resource.Id);
+                            var medOrders = fhirClient.Read<MedicationRequest>("MedicationRequest/" + entry.Resource.Id);
                             //var safeCast = (medOrders?.Medication as ResourceReference)?.Reference;
                             //if (string.IsNullOrWhiteSpace(safeCast))
                             //{
@@ -130,7 +224,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                             //else
                             //{
                             DataRow dRowMedication = dtMedications.NewRow();
-                            dRowMedication["CreatedBy"] = medOrders.Prescriber.Display;
+                            dRowMedication["CreatedBy"] = medOrders.Recorder.Display;
                             dRowMedication["MedicationId"] = medOrders.Id;
 
                             try
@@ -147,7 +241,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                             if (medOrders.DosageInstruction[0].Timing.Repeat != null)
                             {
                                 dRowMedication["DosageFrequencyValue"] = medOrders.DosageInstruction[0].Timing.Repeat.Period.ToString();
-                                dRowMedication["DosageFrequencyUnit"] = medOrders.DosageInstruction[0].Timing.Repeat.PeriodUnits.ToString();
+                                //dRowMedication["DosageFrequencyUnit"] = medOrders.DosageInstruction[0].Timing.Repeat.PeriodUnits.ToString();
                             }
 
                             if (medOrders.DosageInstruction[0].Route != null)
@@ -155,15 +249,15 @@ namespace EMRIntegrations.Epic.ModuleClasses
                                 dRowMedication["DosageRoute"] = medOrders.DosageInstruction[0].Route.Coding[0].Display;
                             }
 
-                            if (medOrders.DosageInstruction[0].AdditionalInstructions != null)
+                            if (medOrders.DosageInstruction[0].PatientInstruction != null)
                             {
-                                dRowMedication["DosageAdditionalInstructions"] = medOrders.DosageInstruction[0].AdditionalInstructions.Text;
+                                dRowMedication["DosageAdditionalInstructions"] = medOrders.DosageInstruction[0].PatientInstruction.ToString();
                             }
 
-                            if ((Hl7.Fhir.Model.Quantity)medOrders.DosageInstruction[0].Dose != null)
+                            if (medOrders.DosageInstruction[0].DoseAndRate[0].Dose != null)
                             {
-                                dRowMedication["DosageUnit"] = ((Hl7.Fhir.Model.Quantity)medOrders.DosageInstruction[0].Dose).Unit;
-                                dRowMedication["DosageQuantity"] = ((Hl7.Fhir.Model.Quantity)medOrders.DosageInstruction[0].Dose).Value;
+                                dRowMedication["DosageUnit"] = medOrders.DosageInstruction[0].DoseAndRate[0].Dose;
+                                dRowMedication["DosageQuantity"] = medOrders.DosageInstruction[0].DoseAndRate[0].Dose;
                             }
 
                             dRowMedication["DosageFrequencyDescription"] = string.Empty;
@@ -175,7 +269,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                                 dRowMedication["StartDate"] = ((Hl7.Fhir.Model.Period)(medOrders.DosageInstruction[0].Timing.Repeat.Bounds)).Start == null ? string.Empty : DateFormatMMDDYYYY(((Hl7.Fhir.Model.Period)(medOrders.DosageInstruction[0].Timing.Repeat.Bounds)).Start);
                             }
 
-                            dRowMedication["EnterDate"] = medOrders.DateWritten == null ? string.Empty : DateFormatMMDDYYYY(medOrders.DateWritten);
+                            dRowMedication["EnterDate"] = medOrders.AuthoredOn == null ? string.Empty : DateFormatMMDDYYYY(medOrders.AuthoredOn);
 
                             dtMedications.Rows.Add(dRowMedication);
 
