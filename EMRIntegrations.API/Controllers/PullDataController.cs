@@ -58,7 +58,7 @@ namespace EMRIntegrations.Controllers
                                 //PostDataToIntelliH("https://apis-dev.intellih.com/api/EMR/SaveDataFromStagingToIntelliH", JSONString);
 
                                 break;
-                            case "14"://Allergy
+                            case "15"://Allergy
                                 RequestID = InitialLog1(EMRID, ModuleID, EMRPatientID);
                                 objAthenaAPI = new EMRIntegrations.Athena.AthenaAPI();
                                 InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
@@ -149,7 +149,7 @@ namespace EMRIntegrations.Controllers
                                 //PostDataToIntelliH("https://apis-dev.intellih.com/api/EMR/SaveDataFromStagingToIntelliH", JSONString);
 
                                 break;
-                            case "14"://Allergy
+                            case "15"://Allergy
                                 RequestID = InitialLog1(EMRID, ModuleID, EMRPatientID);
                                 objCernerAPI = new EMRIntegrations.CernerMillenium.CernerMilleniumAPI();
                                 InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
@@ -218,7 +218,7 @@ namespace EMRIntegrations.Controllers
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
                                 JSONString = objEpicAPI.GetJSONPatientDemographics(dtPatientData, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                                 break;
-                            case "14"://Allergy
+                            case "15"://Allergy
                                 RequestID = InitialLog1(EMRID, ModuleID, EMRPatientID);
                                 objEpicAPI = new EMRIntegrations.Epic.EpicAPI();
                                 InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
@@ -298,7 +298,7 @@ namespace EMRIntegrations.Controllers
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
                                 JSONString = objEpicR4API.GetJSONPatientDemographics(dtPatientData, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                                 break;
-                            case "14"://Allergy
+                            case "15"://Allergy
                                 RequestID = InitialLog1(EMRID, ModuleID, EMRPatientID);
                                 objEpicR4API = new EMRIntegrations.EpicR4.EpicR4API();
                                 InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
@@ -347,6 +347,21 @@ namespace EMRIntegrations.Controllers
                                 InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
 
                                 DataTable dtPatientData = objDrChronoAPI.GetPatientDemographics(EMRPatientID, oMasterConnection.EmrStagingDBConStr, RequestID, AccessToken);
+                                
+                                if (dtPatientData.Rows.Count == 0)
+                                {
+                                    JSONStringReturn.Append("{");
+                                    JSONStringReturn.Append("\"EMRPatientId\":" + "\"" + EMRPatientID + "\",");
+                                    JSONStringReturn.Append("\"EMRId\":" + "\"" + EMRID + "\",");
+                                    JSONStringReturn.Append("\"ModuleId\":" + "\"" + ModuleID + "\",");
+                                    JSONStringReturn.Append("\"RequestId\":" + "\"" + RequestID + "\",");
+                                    JSONStringReturn.Append("\"CreatedBy\":" + "\"\",");
+                                    JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":");
+                                    JSONStringReturn.Append("\"No Patient Found\"");
+                                    JSONStringReturn.Append("}");
+                                    return JSONStringReturn.ToString();
+                                }
+
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataPulledInMemoryFromEMR, RequestID, EMRID, ModuleID, EMRPatientID);
                                 objDrChronoAPI.SavePatientDemographics(dtPatientData, oMasterConnection.EmrStagingDBConStr, RequestID);
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
@@ -363,16 +378,16 @@ namespace EMRIntegrations.Controllers
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
                                 JSONString = objDrChronoAPI.GetJSONMedications(dtMedicationData, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                                 break;
-                            case "15"://DocumentUpload
+                            case "15"://Allergy
                                 RequestID = InitialLog1(EMRID, ModuleID, EMRPatientID);
                                 objDrChronoAPI = new EMRIntegrations.DrChrono.DrChronoAPI();
                                 InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
 
-                                DataTable dtDocumentUploadData = objDrChronoAPI.PostDocument(EMRPatientID, oMasterConnection.EmrStagingDBConStr, RequestID, AccessToken);
+                                DataTable dtAllergyData = objDrChronoAPI.GetAllergy(EMRPatientID, oMasterConnection.EmrStagingDBConStr, RequestID, AccessToken);
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataPulledInMemoryFromEMR, RequestID, EMRID, ModuleID, EMRPatientID);
-                                objDrChronoAPI.SaveDocumentUpload(dtDocumentUploadData, oMasterConnection.EmrStagingDBConStr, RequestID);
+                                objDrChronoAPI.SaveAllergy(dtAllergyData, oMasterConnection.EmrStagingDBConStr, RequestID);
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
-                                JSONString = objDrChronoAPI.GetJSONDocumentUpload(dtDocumentUploadData, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
+                                JSONString = objDrChronoAPI.GetJSONAllergy(dtAllergyData, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                                 break;
                             default:
                                 JSONStringReturn.Append("{");

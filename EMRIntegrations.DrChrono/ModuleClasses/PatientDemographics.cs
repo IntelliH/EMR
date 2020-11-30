@@ -49,6 +49,9 @@ namespace EMRIntegrations.DrChrono
 
                 dtClinicaldata = GetModuleDataBase.ConvertToDataTable(Patientdata);
 
+                if (dtClinicaldata.Rows[0][dtClinicaldata.Columns["Detail"]].ToString().Trim().ToLower() == "not found.")
+                    return new DataTable();
+
                 dtClinicaldata.TableName = strModuleName;
                 
                 return dtClinicaldata;
@@ -198,6 +201,9 @@ namespace EMRIntegrations.DrChrono
 
             [JsonProperty("updated_at")]
             public string Updated_at { get; set; }
+
+            [JsonProperty("detail")]
+            public string Detail { get; set; }
         }
 
         public string GenerateAPIJSONString(DataTable dtPatientData, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)
@@ -339,6 +345,7 @@ namespace EMRIntegrations.DrChrono
                 JSONString.Append("\"StateId\":" + "\"\",");
                 JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
                 JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
+                JSONString.Append("\"DoctorId\":" + "\"" + drow["Doctor"].ToString() + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
                 JSONString.Append("\"POSCode\":" + "\"\"");

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,115 +50,25 @@ namespace EMRIntegrations.DrChrono
         {
             try
             {
-                string strModuleName = string.Empty;
-                strModuleName = "Allergy";
+                string strModuleName = "Allergies";
 
-                DataSet dsModuleData = new DataSet(strModuleName);
                 DataTable dtClinicaldata = new DataTable();
 
-                // Do data processing here.
-                APIConnection api = (APIConnection)parameters["athenaapiobject"];
-                List<allergy> objallergies = new List<allergy>();
+                var client = new RestClient("" + parameters["api_baseurl"].ToString() + "api/allergies?patient=" + parameters["patientid"].ToString() + "");
+                var request = new RestRequest(Method.GET);
+                request.AddHeader("cache-control", "no-cache");
+                request.AddHeader("authorization", "bearer:" + parameters["access_token"].ToString() + "");
+                IRestResponse response = client.Execute(request);
 
-                //ArrayList arydept = new ArrayList();
-                //arydept = (ArrayList)parameters["api_departmentid"];
+                var data = (JObject)JsonConvert.DeserializeObject(response.Content);
 
-                //foreach (var value in arydept)
-                //{
+                JToken jtobj = (JToken)JsonConvert.DeserializeObject(data.SelectToken("results").ToString());
 
-                Dictionary<string, string> dirlst = new Dictionary<string, string>()
-                     {
-                        {"departmentid", parameters["api_departmentid"].ToString()}
-                    };
+                List<allergydetail> allergydata = jtobj.ToObject<List<allergydetail>>();
 
-                JObject jobj = (JObject)api.GET("chart/" + parameters["patientid"].ToString() + "/allergies", dirlst);
-                JToken jtobj = jobj["allergies"];
+                dtClinicaldata = GetModuleDataBase.ConvertToDataTable(allergydata);
 
-                if (jtobj != null)
-                {
-                    if (jtobj.HasValues && jtobj.SelectToken("error") != null)
-                    {
-                        throw new Exception(jtobj["error"].ToString());
-                    }
-
-                    objallergies = jtobj.ToObject<List<allergy>>();
-
-                    int count = 0;
-                    foreach (var item in objallergies)
-                    {
-                        if (item.Reactions.Count() > 0)
-                        {
-                            foreach (var subitem in item.Reactions)
-                            {
-                                if (subitem.Reactionname != "")
-                                {
-                                    objallergies[count].Reaction = string.Concat(objallergies[count].Reaction, subitem.Reactionname, ",");
-                                }
-
-                                if (subitem.Snomedcode != "")
-                                {
-                                    objallergies[count].Snomed = string.Concat(objallergies[count].Snomed, subitem.Snomedcode, ",");
-                                }
-
-                                if (subitem.Severity != "")
-                                {
-                                    objallergies[count].Severity = string.Concat(objallergies[count].Severity, subitem.Severity, ",");
-                                }
-
-                                if (subitem.Severitysnomedcode != "")
-                                {
-                                    objallergies[count].Severitysnomedcode = string.Concat(objallergies[count].Severitysnomedcode, subitem.Severitysnomedcode, ",");
-                                }
-                            }
-                            objallergies[count].Reaction = objallergies[count].Reaction.TrimEnd(',');
-                            objallergies[count].Snomed = objallergies[count].Snomed.TrimEnd(',');
-                            objallergies[count].Severity = objallergies[count].Severity.TrimEnd(',');
-                            objallergies[count].Severitysnomedcode = objallergies[count].Severitysnomedcode.TrimEnd(',');
-                        }
-                        count += 1;
-
-                    }
-                }
-                //}
-                dtClinicaldata = GetModuleDataBase.ConvertToDataTable(objallergies);
-
-                if (!dtClinicaldata.Columns.Contains("patientid"))
-                {
-                    dtClinicaldata.Columns.Add("patientid");
-                }
-
-                if (!dtClinicaldata.Columns.Contains("codesystemid"))
-                {
-                    dtClinicaldata.Columns.Add("codesystemid");
-                }
-
-                if (!dtClinicaldata.Columns.Contains("admitflag"))
-                {
-                    dtClinicaldata.Columns.Add("admitflag");
-                }
-
-                if (!dtClinicaldata.Columns.Contains("daterecorded"))
-                {
-                    dtClinicaldata.Columns.Add("daterecorded");
-                }
-
-                if (dtClinicaldata != null && dtClinicaldata.Rows.Count > 0)
-                {
-                    dtClinicaldata.Columns["Allergenname"].ColumnName = "allergicto";
-                    dtClinicaldata.Columns["Snomed"].ColumnName = "Reactionsnomedcode";
-                }
-
-                foreach (DataRow dr in dtClinicaldata.Rows)
-                {
-                    dr["patientid"] = parameters["patientid"];
-                    dr["admitflag"] = "1";
-                    dr["onsetdate"] = dr["onsetdate"].ToString();
-                    dr["Deactivatedate"] = dr["Deactivatedate"].ToString();
-                    dr["daterecorded"] = DateTime.Now.ToString();
-                }
-                dtClinicaldata = dtClinicaldata.DefaultView.ToTable(true);
-                //dsModuleData.Tables.Add(dtValidation);
-                //dsModuleData.Tables.Add(dtClinicaldata);
+                dtClinicaldata.TableName = strModuleName;
 
                 return dtClinicaldata;
             }
@@ -165,6 +76,33 @@ namespace EMRIntegrations.DrChrono
             {
                 throw;
             }
+        }
+
+        private class allergydetail
+        {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("doctor")]
+            public string Doctor { get; set; }
+
+            [JsonProperty("patient")]
+            public string Patient { get; set; }
+
+            [JsonProperty("rxnorm")]
+            public string RxNorm { get; set; }
+
+            [JsonProperty("reaction")]
+            public string Reaction { get; set; }
+
+            [JsonProperty("snomed_reaction")]
+            public string Snomed_Reaction { get; set; }
+
+            [JsonProperty("status")]
+            public string Status { get; set; }
+
+            [JsonProperty("notes")]
+            public string Notes { get; set; }
         }
 
         public string GenerateAPIJSONString(DataTable dtAllergy, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)
@@ -194,7 +132,7 @@ namespace EMRIntegrations.DrChrono
             JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
             JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
             JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Allergy\":");
+            JSONString.Append("\"Allergies\":");
 
             if (table.Rows.Count == 0)
             {
@@ -212,19 +150,16 @@ namespace EMRIntegrations.DrChrono
 
                 JSONString.Append("{");
 
-                JSONString.Append("\"allergicto\":" + "\"" + drow["allergicto"].ToString() + "\",");
+                JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
+                JSONString.Append("\"Substance\":" + "\"Allergy name not found\",");
                 JSONString.Append("\"Reaction\":" + "\"" + drow["Reaction"].ToString() + "\",");
-                JSONString.Append("\"Reactionsnomedcode\":" + "\"" + drow["Reactionsnomedcode"].ToString() + "\",");
-                JSONString.Append("\"Severity\":" + "\"" + drow["Severity"].ToString() + "\",");
-                JSONString.Append("\"Note\":" + "\"" + drow["Note"].ToString() + "\",");
-                JSONString.Append("\"Onsetdate\":" + "\"" + drow["Onsetdate"].ToString() + "\",");
-                JSONString.Append("\"Severitysnomedcode\":" + "\"" + drow["Severitysnomedcode"].ToString() + "\",");
-                JSONString.Append("\"Encounterid\":" + "\"" + drow["Encounterid"].ToString() + "\",");
-                JSONString.Append("\"Deactivatedate\":" + "\"" + drow["Deactivatedate"].ToString() + "\",");
-                JSONString.Append("\"patientid\":" + "\"" + drow["patientid"].ToString() + "\",");
-                JSONString.Append("\"admitflag\":" + "\"" + drow["admitflag"].ToString() + "\",");
-                JSONString.Append("\"daterecorded\":" + "\"" + drow["daterecorded"].ToString() + "\",");
-
+                JSONString.Append("\"Severity\":" + "\"\",");
+                JSONString.Append("\"ReportedOn\":" + "\"\",");
+                JSONString.Append("\"AllergyGenCode \":" + "\"\",");
+                JSONString.Append("\"RxNormCode \":" + "\"" + drow["RxNorm"].ToString() + "\",");
+                JSONString.Append("\"AllergyStatus\":" + "\""+ drow["Status"].ToString() + "\",");
+                JSONString.Append("\"Note\":" + "\"" + drow["Notes"].ToString() + "\"");
+                
                 if (counter == table.Rows.Count)
                 {
                     JSONString.Append("}");
@@ -237,57 +172,6 @@ namespace EMRIntegrations.DrChrono
             JSONString.Append("]");
             JSONString.Append("}");
             return JSONString.ToString();
-        }
-
-        private class allergy
-        {
-            [JsonProperty("allergenname")]
-            public string Allergenname { get; set; }
-
-            [JsonProperty("allergenid")]
-            public string Allergenid { get; set; }
-
-            [JsonProperty("reactions")]
-            public reactions[] Reactions { get; set; }
-
-            [JsonProperty("reaction")]
-            public string Reaction { get; set; }
-
-            [JsonProperty("snomed")]
-            public string Snomed { get; set; }
-
-            [JsonProperty("severity")]
-            public string Severity { get; set; }
-
-            [JsonProperty("note")]
-            public string Note { get; set; }
-
-            [JsonProperty("onsetdate")]
-            public string Onsetdate { get; set; }
-
-            [JsonProperty("severitysnomedcode")]
-            public string Severitysnomedcode { get; set; }
-
-            [JsonProperty("encounterid")]
-            public string Encounterid { get; set; }
-
-            [JsonProperty("deactivatedate")]
-            public string Deactivatedate { get; set; }
-        }
-
-        private class reactions
-        {
-            [JsonProperty("reactionname")]
-            public string Reactionname { get; set; }
-
-            [JsonProperty("snomedcode")]
-            public string Snomedcode { get; set; }
-
-            [JsonProperty("severity")]
-            public string Severity { get; set; }
-
-            [JsonProperty("severitysnomedcode")]
-            public string Severitysnomedcode { get; set; }
         }
     }
 }

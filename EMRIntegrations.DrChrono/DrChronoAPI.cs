@@ -23,93 +23,22 @@ namespace EMRIntegrations.DrChrono
             parameters.Add("api_baseurl", "https://drchrono.com/");
             parameters.Add("access_token", null);
             parameters.Add("patientid", null);
-            parameters.Add("drchronoapiobject", null);
+        }
+
+        public DrChronoAPI(dynamic data, string doctorId)
+        {
+
+            parameters.Add("api_baseurl", "https://drchrono.com/");
+            parameters.Add("access_token", ((Newtonsoft.Json.Linq.JValue)data.accessToken).Value.ToString());
+            parameters.Add("patientid", ((Newtonsoft.Json.Linq.JValue)data.emrPatientid).Value.ToString());
+            parameters.Add("filepath", ((Newtonsoft.Json.Linq.JValue)data.filePath).Value.ToString());
+            parameters.Add("doctorid", doctorId);
+            //parameters.Add("doctorid", ((Newtonsoft.Json.Linq.JValue)data.doctorId).Value.ToString());
+            parameters.Add("documentdate", ((Newtonsoft.Json.Linq.JValue)data.documentDate).Value.ToString());
+            parameters.Add("documentdescription", ((Newtonsoft.Json.Linq.JValue)data.documentDescription).Value.ToString());
 
             //SetServiceObject();
         }
-
-        #region Set Service Object
-
-        //private void SetServiceObject()
-        //{
-        //    if (api == null)
-        //    {
-        //        api = new APIConnection(parameters["api_baseurl"].ToString(), parameters["access_token"].ToString().Trim());
-        //        parameters["drchronoapiobject"] = api;
-        //    }
-        //    else
-        //    {
-        //        parameters["drchronoapiobject"] = api;
-        //    }
-        //}
-
-        private class patientids
-        {
-            public string patientid { get; set; }
-        }
-
-        private class Department
-        {
-            public string departmentid { get; set; }
-
-            public string chartsharinggroupid { get; set; }
-        }
-
-        /// <summary>
-        /// Description : Get the all department group and pick first department from each group for filter patient 
-        /// </summary>
-        /// <param name="parameters"></param>
-        private void GetPatientMasterDepartment(Hashtable parameters)
-        {
-            if (departmentMasterList == null || departmentMasterList.Count == 0)
-            {
-                JObject jobj = (JObject)api.GET("departments");
-                JToken jtobj = jobj["departments"];
-                List<Department> objdepartments = jtobj.ToObject<List<Department>>();
-                List<Department> lstchartsharinggroupid = new List<Department>();
-
-                foreach (var item in objdepartments)
-                {
-                    departmentMasterList.Add(item.departmentid);
-                }
-                parameters["api_departmentid_patientmaster"] = departmentMasterList;
-            }
-            else
-            {
-                parameters["api_departmentid_patientmaster"] = departmentMasterList;
-            }
-        }
-
-        /// <summary>
-        /// Description : Get the all department group and pick first department from each group for filter patient 
-        /// </summary>
-        /// <param name="parameters"></param>
-        private void GetClinicalDepartmentList(Hashtable parameters)
-        {
-            if (departmentClinicalList == null || departmentClinicalList.Count == 0)
-            {
-                JObject jobj = (JObject)api.GET("departments");
-                JToken jtobj = jobj["departments"];
-                List<Department> objdepartments = jtobj.ToObject<List<Department>>();
-                List<Department> lstchartsharinggroupid = new List<Department>();
-
-                foreach (var item in objdepartments)
-                {
-                    if (!lstchartsharinggroupid.Exists(m => m.chartsharinggroupid == item.chartsharinggroupid))
-                    {
-                        lstchartsharinggroupid.Add(item);
-                        departmentClinicalList.Add(item.departmentid);
-                    }
-                }
-                parameters["api_departmentid"] = departmentClinicalList;
-            }
-            else
-            {
-                parameters["api_departmentid"] = departmentClinicalList;
-            }
-        }
-
-        #endregion
 
         #region ReadMappingFile
 
@@ -394,7 +323,7 @@ namespace EMRIntegrations.DrChrono
         #region Post Document
 
         //Data Source=WINDOWS-7J7SHKG\SQLEXPRESS;Initial Catalog=IntelliHStagingdrchrono;User ID=sa;Password=Sahil@123
-        public DataTable PostDocument(string patientid, string stagingdbconnectionstring, string requestid, string accesstoken)
+        public string PostDocument(string patientid, string stagingdbconnectionstring, string requestid, string accesstoken)
         {
             try
             {
@@ -402,13 +331,10 @@ namespace EMRIntegrations.DrChrono
                 parameters["patientid"] = patientid;
 
                 DocumentUpload objDocumentUpload = new DocumentUpload();
-                DataTable dtDocumentUpload = new DataTable();
-                dtDocumentUpload = objDocumentUpload.PostData(parameters);
+                string responseDocument = string.Empty;
+                responseDocument = objDocumentUpload.PostData(parameters);
 
-                //Common objCommon = new Common();
-                //objCommon.InsertRecords(dtMedications, "IntelliHdrchronoMedications", stagingdbconnectionstring, requestid);
-
-                return dtDocumentUpload;
+                return responseDocument;
             }
             catch (Exception)
             {
@@ -527,12 +453,12 @@ namespace EMRIntegrations.DrChrono
 
         #region Get Allergy
 
-        public DataTable GetAllergy(string patientid, string departmentid, string stagingdbconnectionstring, string requestid)
+        public DataTable GetAllergy(string patientid, string stagingdbconnectionstring, string requestid, string accesstoken)
         {
             try
             {
+                parameters["access_token"] = accesstoken;
                 parameters["patientid"] = patientid;
-                parameters["api_departmentid"] = departmentid;
 
                 Allergy objAllergy = new Allergy();
                 DataTable dtAllergy = new DataTable();
