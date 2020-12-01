@@ -69,6 +69,7 @@
     <Compile Include="DrChronoAPI.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="GetModuleDataBase.cs" />
+    <Compile Include="ModuleClasses\Problemlist.cs" />
     <Compile Include="ModuleClasses\Allergy.cs" />
     <Compile Include="ModuleClasses\Medications.cs" />
     <Compile Include="ModuleClasses\DocumentUpload.cs" />

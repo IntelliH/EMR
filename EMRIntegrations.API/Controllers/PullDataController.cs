@@ -378,6 +378,17 @@ namespace EMRIntegrations.Controllers
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
                                 JSONString = objDrChronoAPI.GetJSONMedications(dtMedicationData, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                                 break;
+                            case "12"://Problemlist
+                                RequestID = InitialLog1(EMRID, ModuleID, EMRPatientID);
+                                objDrChronoAPI = new EMRIntegrations.DrChrono.DrChronoAPI();
+                                InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
+
+                                DataTable dtProblemlistData = objDrChronoAPI.GetProblemlist(EMRPatientID, oMasterConnection.EmrStagingDBConStr, RequestID, AccessToken);
+                                objLog.LogRequest(oMasterConnection, Logs.Status.DataPulledInMemoryFromEMR, RequestID, EMRID, ModuleID, EMRPatientID);
+                                objDrChronoAPI.SaveProblemlist(dtProblemlistData, oMasterConnection.EmrStagingDBConStr, RequestID);
+                                objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
+                                JSONString = objDrChronoAPI.GetJSONProblemlist(dtProblemlistData, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
+                                break;
                             case "15"://Allergy
                                 RequestID = InitialLog1(EMRID, ModuleID, EMRPatientID);
                                 objDrChronoAPI = new EMRIntegrations.DrChrono.DrChronoAPI();

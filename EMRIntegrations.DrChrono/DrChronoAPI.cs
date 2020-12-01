@@ -30,7 +30,7 @@ namespace EMRIntegrations.DrChrono
 
             parameters.Add("api_baseurl", "https://drchrono.com/");
             parameters.Add("access_token", ((Newtonsoft.Json.Linq.JValue)data.accessToken).Value.ToString());
-            parameters.Add("patientid", ((Newtonsoft.Json.Linq.JValue)data.emrPatientid).Value.ToString());
+            parameters.Add("patientid", ((Newtonsoft.Json.Linq.JValue)data.emrPatientId).Value.ToString());
             parameters.Add("filepath", ((Newtonsoft.Json.Linq.JValue)data.filePath).Value.ToString());
             parameters.Add("doctorid", doctorId);
             //parameters.Add("doctorid", ((Newtonsoft.Json.Linq.JValue)data.doctorId).Value.ToString());
@@ -323,7 +323,7 @@ namespace EMRIntegrations.DrChrono
         #region Post Document
 
         //Data Source=WINDOWS-7J7SHKG\SQLEXPRESS;Initial Catalog=IntelliHStagingdrchrono;User ID=sa;Password=Sahil@123
-        public string PostDocument(string patientid, string stagingdbconnectionstring, string requestid, string accesstoken)
+        public DataTable PostDocument(string patientid, string stagingdbconnectionstring, string requestid, string accesstoken)
         {
             try
             {
@@ -331,10 +331,10 @@ namespace EMRIntegrations.DrChrono
                 parameters["patientid"] = patientid;
 
                 DocumentUpload objDocumentUpload = new DocumentUpload();
-                string responseDocument = string.Empty;
-                responseDocument = objDocumentUpload.PostData(parameters);
+                DataTable responseData = new DataTable();
+                responseData = objDocumentUpload.PostData(parameters);
 
-                return responseDocument;
+                return responseData;
             }
             catch (Exception)
             {
@@ -342,12 +342,12 @@ namespace EMRIntegrations.DrChrono
             }
         }
 
-        public void SaveDocumentUpload(DataTable dtMedications, string stagingdbconnectionstring, string requestid)
+        public void SaveDocumentUpload(DataTable dtDocument, string stagingdbconnectionstring, string requestid)
         {
             try
             {
                 Common objCommon = new Common();
-                objCommon.InsertRecords(dtMedications, "drchrono.Medications", stagingdbconnectionstring, requestid);
+                objCommon.InsertRecords(dtDocument, "drchrono.PushDocument", stagingdbconnectionstring, requestid);
             }
             catch (Exception)
             {
@@ -355,12 +355,12 @@ namespace EMRIntegrations.DrChrono
             }
         }
 
-        public string GetJSONDocumentUpload(DataTable dtMedications, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)
+        public string GetJSONDocumentUpload(DataTable dtDocument, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)
         {
             try
             {
-                Medications objMedications = new Medications();
-                string JSONString = objMedications.GenerateAPIJSONString(dtMedications, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
+                DocumentUpload objDocument = new DocumentUpload();
+                string JSONString = objDocument.GenerateAPIJSONString(dtDocument, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                 return JSONString;
             }
             catch (Exception)
@@ -494,6 +494,59 @@ namespace EMRIntegrations.DrChrono
             {
                 Allergy objAllergy = new Allergy();
                 string JSONString = objAllergy.GenerateAPIJSONString(dtAllergy, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
+                return JSONString;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Get Problemlist
+
+        public DataTable GetProblemlist(string patientid, string stagingdbconnectionstring, string requestid, string accesstoken)
+        {
+            try
+            {
+                parameters["access_token"] = accesstoken;
+                parameters["patientid"] = patientid;
+
+                Problemlist objProblemlist = new Problemlist();
+                DataTable dtProblemlist = new DataTable();
+                dtProblemlist = objProblemlist.GetData(parameters);
+
+                //Common objCommon = new Common();
+                //objCommon.InsertRecords(dtProblemlist, "IntelliHdrchronoProblemlist", stagingdbconnectionstring, requestid);
+
+                return dtProblemlist;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void SaveProblemlist(DataTable dtProblemlist, string stagingdbconnectionstring, string requestid)
+        {
+            try
+            {
+                Common objCommon = new Common();
+                objCommon.InsertRecords(dtProblemlist, "drchrono.Problemlist", stagingdbconnectionstring, requestid);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string GetJSONProblemlist(DataTable dtProblemlist, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)
+        {
+            try
+            {
+                Problemlist objProblemlist = new Problemlist();
+                string JSONString = objProblemlist.GenerateAPIJSONString(dtProblemlist, EMRPatientID, RequestID, EMRID, ModuleID, UserID);
                 return JSONString;
             }
             catch (Exception)
