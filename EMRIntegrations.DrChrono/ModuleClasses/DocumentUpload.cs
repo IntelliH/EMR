@@ -127,7 +127,7 @@ namespace EMRIntegrations.DrChrono
             JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
             JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
             JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"EMRUserExtensionLogDetails\":");
+            JSONString.Append("\"DocumentLogDetails\":");
 
             if (table.Rows.Count == 0)
             {
@@ -141,7 +141,7 @@ namespace EMRIntegrations.DrChrono
                 JSONString.Append("{");
 
                 JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
-                JSONString.Append("\"Doctor\":" + "\"" + drow["Doctor"].ToString() + "\",");
+                JSONString.Append("\"DoctorId\":" + "\"" + drow["Doctor"].ToString() + "\",");
                 JSONString.Append("\"DocumentPath\":" + "\"" + drow["Document"].ToString() + "\",");
                 JSONString.Append("\"Date\":" + "\"" + drow["Date"].ToString() + "\",");
                 JSONString.Append("\"Description\":" + "\"" + drow["Description"].ToString() + "\"");

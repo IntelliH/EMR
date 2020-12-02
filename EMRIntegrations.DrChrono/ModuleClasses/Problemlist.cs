@@ -169,7 +169,7 @@ namespace EMRIntegrations.DrChrono
                 JSONString.Append("{");
 
                 JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
-                JSONString.Append("\"Doctor\":" + "\"" + drow["Doctor"].ToString() + "\",");
+                JSONString.Append("\"DoctorId\":" + "\"" + drow["Doctor"].ToString() + "\",");
                 JSONString.Append("\"icd_version\":" + "\"" + drow["icd_version"].ToString() + "\",");
                 JSONString.Append("\"icd_code\":" + "\"" + drow["icd_code"].ToString() + "\",");
                 JSONString.Append("\"name\":" + "\"" + drow["name"].ToString() + "\",");
