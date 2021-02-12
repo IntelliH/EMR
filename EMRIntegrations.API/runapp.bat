@@ -1,4 +1,4 @@
-
+Copy C:\inetpub\wwwroot\webapp\Web.Docker.config C:\inetpub\wwwroot\webapp\Web.config 
 @PowerShell "(GC C:\inetpub\wwwroot\webapp\Web.config)|%%{$_ -Replace '#DB_HOST#',$env:DB_HOST}|SC C:\inetpub\wwwroot\webapp\Web.config"
 @PowerShell "(GC C:\inetpub\wwwroot\webapp\Web.config)|%%{$_ -Replace '#DB_USER#',$env:DB_USER}|SC C:\inetpub\wwwroot\webapp\Web.config"
 @PowerShell "(GC C:\inetpub\wwwroot\webapp\Web.config)|%%{$_ -Replace '#DB_PASSWORD#',$env:DB_PASSWORD}|SC C:\inetpub\wwwroot\webapp\Web.config"
