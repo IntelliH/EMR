@@ -54,7 +54,7 @@ namespace EMRIntegrations.DrChrono
 
                 DataTable dtClinicaldata = new DataTable();
 
-                var client = new RestClient("" + parameters["api_baseurl"].ToString() + "api/allergies?patient=" + parameters["patientid"].ToString() + "");
+                var client = new RestClient("" + parameters["api_baseurl"].ToString() + "api/allergies?patient=" + parameters["patientid"].ToString() + "&verbose=true");
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("cache-control", "no-cache");
                 request.AddHeader("authorization", "bearer:" + parameters["access_token"].ToString() + "");
@@ -103,6 +103,9 @@ namespace EMRIntegrations.DrChrono
 
             [JsonProperty("notes")]
             public string Notes { get; set; }
+
+            [JsonProperty("description")]
+            public string Description { get; set; }
         }
 
         public string GenerateAPIJSONString(DataTable dtAllergy, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)
@@ -151,7 +154,7 @@ namespace EMRIntegrations.DrChrono
                 JSONString.Append("{");
 
                 JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
-                JSONString.Append("\"Substance\":" + "\"Allergy name not found\",");
+                JSONString.Append("\"Substance\":" + "\"" + drow["Description"].ToString() + "\",");
                 JSONString.Append("\"Reaction\":" + "\"" + drow["Reaction"].ToString() + "\",");
                 JSONString.Append("\"Severity\":" + "\"\",");
                 JSONString.Append("\"ReportedOn\":" + "\"\",");
