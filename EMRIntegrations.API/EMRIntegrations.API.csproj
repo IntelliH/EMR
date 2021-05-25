@@ -209,9 +209,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\IntelliHEndPointController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PullController.cs" />
     <Compile Include="Controllers\DocumentController.cs" />
+    <Compile Include="Controllers\PullController.cs" />
     <Compile Include="Controllers\PullDataController.cs" />
     <Compile Include="Controllers\PullDataExcludedController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
