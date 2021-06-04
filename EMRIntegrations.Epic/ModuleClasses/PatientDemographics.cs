@@ -49,7 +49,9 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 dtPatientDemographics.Columns.Add("ZipCode");
                 dtPatientDemographics.Columns.Add("SSN");
 
-                var fhirClient = new FhirClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2");
+                var fhirClient = new FhirClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
+                //var fhirClient = new FhirClient("https://open-ic.epic.com/argonaut/api/FHIR/Argonaut/");
+
 
                 fhirClient.UseFormatParam = true;
                 fhirClient.PreferredFormat = ResourceFormat.Json;

@@ -45,7 +45,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
 
             try
             {
-                var fhirClient = new FhirClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2");
+                var fhirClient = new FhirClient("https://open-ic.epic.com/FHIR/api/FHIR/DSTU2/");
 
                 fhirClient.UseFormatParam = true;
 
