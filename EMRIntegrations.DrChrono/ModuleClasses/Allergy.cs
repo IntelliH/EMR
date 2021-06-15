@@ -58,7 +58,17 @@ namespace EMRIntegrations.DrChrono
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("cache-control", "no-cache");
                 request.AddHeader("authorization", "bearer:" + parameters["access_token"].ToString() + "");
-                IRestResponse response = client.Execute(request);
+
+                IRestResponse response;
+
+                try
+                {
+                    response = client.Execute(request);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error: Operation was unsuccessful because of a client error.");
+                }
 
                 var data = (JObject)JsonConvert.DeserializeObject(response.Content);
 

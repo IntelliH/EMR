@@ -49,7 +49,16 @@ namespace EMRIntegrations.DrChrono
                 request.AddParameter("date", parameters["documentdate"].ToString());
                 request.AddParameter("description", parameters["documentdescription"].ToString());
 
-                IRestResponse response = client.Execute(request);
+                IRestResponse response;
+
+                try
+                {
+                    response = client.Execute(request);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error: Operation was unsuccessful because of a client error.");
+                }
 
                 var data = (JObject)JsonConvert.DeserializeObject(response.Content);
 

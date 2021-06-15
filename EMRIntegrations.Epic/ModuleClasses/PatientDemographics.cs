@@ -67,11 +67,11 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 {
                     if (ex.Message.Contains("Operation was unsuccessful because of a client error (NotFound)."))
                     {
-                        return dtPatientDemographics;
+                        throw new Exception("Error: Operation was unsuccessful because of a client error.");
                     }
                     else
                     {
-                        throw ex;
+                        throw new Exception("Error: " + ex.Message);
                     }
                 }
 
@@ -259,9 +259,9 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
                 JSONString.Append("\"StateId\":" + "\"\",");
                 JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
-                JSONString.Append("\"Ethnicity\":" + "\"" + drow["Ethnicity"].ToString() + "\",");
+                JSONString.Append("\"Ethnicity\":" + "\"" + mapEthnicity(drow["EthnicityCode"].ToString()) + "\",");
                 JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
-                JSONString.Append("\"Race\":" + "\"" + drow["Race"].ToString() + "\",");
+                JSONString.Append("\"Race\":" + "\"" + mapRace(drow["RaceCode"].ToString()) + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
                 JSONString.Append("\"POSCode\":" + "\"\"");
@@ -270,6 +270,52 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 JSONString.Append("}");
             }
             return JSONString.ToString();
+        }
+
+        string mapRace(string race)
+        {
+            try
+            {
+                switch (race)
+                {
+                    case "1002-5":
+                        return "American Indian or Alaska Native";
+                    case "2028-9":
+                        return "Asian";
+                    case "2054-5":
+                        return "Black or African American";
+                    case "2076-8":
+                        return "Native Hawaiian or Other Pacific Islander";
+                    case "2106-3":
+                        return "White";
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        string mapEthnicity(string ethnicity)
+        {
+            try
+            {
+                switch (ethnicity)
+                {
+                    case "2135-2":
+                        return "Hispanic";
+                    case "2186-5":
+                        return "Non-hispanic";
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

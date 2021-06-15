@@ -41,7 +41,16 @@ namespace EMRIntegrations.DrChrono
                 request.AddHeader("cache-control", "no-cache");
                 request.AddHeader("authorization", "bearer:" + parameters["access_token"].ToString() + "");
 
-                IRestResponse response = client.Execute(request);
+                IRestResponse response;
+
+                try
+                {
+                    response = client.Execute(request);
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Error: Operation was unsuccessful because of a client error.");
+                }
 
                 JToken jtobj = (JToken)JsonConvert.DeserializeObject("[" + response.Content.Replace("[", "\"[").Replace("]", "]\"") + "]");
 
@@ -343,8 +352,8 @@ namespace EMRIntegrations.DrChrono
                 JSONString.Append("\"weight\":" + "\"\",");
                 JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
                 JSONString.Append("\"StateId\":" + "\"\",");
-                JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
-                JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
+                JSONString.Append("\"EthnicityCode\":" + "\"" + mapEthnicity(drow["EthnicityCode"].ToString()) + "\",");
+                JSONString.Append("\"RaceCode\":" + "\"" + mapRace(drow["RaceCode"].ToString()) + "\",");
                 JSONString.Append("\"DoctorId\":" + "\"" + drow["Doctor"].ToString() + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
@@ -356,5 +365,56 @@ namespace EMRIntegrations.DrChrono
             return JSONString.ToString();
         }
 
+        string mapRace(string race)
+        {
+            try
+            {
+                switch (race)
+                {
+                    case "black":
+                        return "Black or African American";
+                    case "asian":
+                        return "Asian";
+                    case "indian":
+                        return "American Indian or Alaska Native";
+                    case "hawaiian":
+                        return "Native Hawaiian or Other Pacific Islander";
+                    case "white":
+                        return "White";
+                    case "other":
+                        return "Others";
+                    case "declined":
+                        return string.Empty;
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        string mapEthnicity(string ethnicity)
+        {
+            try
+            {
+                switch (ethnicity)
+                {
+                    case "hispanic":
+                        return "Hispanic";
+                    case "not_hispanic":
+                        return "Non-hispanic";
+                    case "declined":
+                        return string.Empty;
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -20,14 +20,15 @@ namespace EMRIntegrations.Controllers
 
         public string GetModuleData(string EMRID, string ModuleID, string EMRPatientID, string AccessToken)
         {
+            StringBuilder JSONStringReturn = new StringBuilder();
+            string RequestID = string.Empty;
+
             try
             {
                 string UserID = string.Empty;
                 string DepartmentID = "1";
                 string JSONString = string.Empty;
-                string RequestID = string.Empty;
-                StringBuilder JSONStringReturn = new StringBuilder();
-
+                
                 // Get the variable values from JSON
 
                 oMasterConnection.EMRIntegrationMasterConStr = ConfigurationManager.ConnectionStrings["EMRIntegrationMaster"].ConnectionString;
@@ -437,7 +438,16 @@ namespace EMRIntegrations.Controllers
             }
             catch (Exception ex)
             {
-                return ex.Message + " " + ex.StackTrace;
+                JSONStringReturn.Append("{");
+                JSONStringReturn.Append("\"EMRPatientId\":" + "\"" + EMRPatientID + "\",");
+                JSONStringReturn.Append("\"EMRId\":" + "\"" + EMRID + "\",");
+                JSONStringReturn.Append("\"ModuleId\":" + "\"" + ModuleID + "\",");
+                JSONStringReturn.Append("\"RequestId\":" + "\"" + RequestID + "\",");
+                JSONStringReturn.Append("\"CreatedBy\":" + "\"\",");
+                JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":");
+                JSONStringReturn.Append("\""+ ex.Message +"\"");
+                JSONStringReturn.Append("}");
+                return JSONStringReturn.ToString();
             }
         }
 

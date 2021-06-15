@@ -50,7 +50,8 @@ namespace EMRIntegrations.DrChrono
                 {
                     if (jtobj.HasValues && jtobj.SelectToken("error") != null)
                     {
-                        return new DataTable();
+                        throw new Exception("Error: Operation was unsuccessful because of a client error.");
+                        //return new DataTable();
                         //dtValidation.Rows.Add(new object[] { parameters["patientid"].ToString(), "", "", "", "", strModuleName, string.Empty, jtobj["error"].ToString() + parameters["patientid"].ToString() });
                         //{ throw new Exception(jtobj["error"].ToString()); }
 
