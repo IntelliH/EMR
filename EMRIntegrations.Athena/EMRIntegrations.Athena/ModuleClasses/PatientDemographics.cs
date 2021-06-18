@@ -944,9 +944,9 @@ namespace EMRIntegrations.Athena
                 JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
                 JSONString.Append("\"StateId\":" + "\"\",");
                 JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
-                JSONString.Append("\"Ethnicity\":" + "\"" + drow["Original_Ethnicity"].ToString() + "\",");
-                JSONString.Append("\"RaceCode\":" + "\"\",");
-                JSONString.Append("\"Race\":" + "\"" + drow["RaceCode"].ToString() + "\",");
+                JSONString.Append("\"Ethnicity\":" + "\"" + mapEthnicity(drow["EthnicityCode"].ToString()) + "\",");
+                JSONString.Append("\"RaceCode\":" + "\"" + mapRaceCode(drow["RaceCode"].ToString()) + "\",");
+                JSONString.Append("\"Race\":" + "\"" + mapRace(drow["RaceCode"].ToString()) + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
                 JSONString.Append("\"POSCode\":" + "\"\"");
@@ -955,6 +955,90 @@ namespace EMRIntegrations.Athena
                 JSONString.Append("}");
             }
             return JSONString.ToString();
+        }
+
+        string mapRace(string race)
+        {
+            try
+            {
+                switch (race.ToLower())
+                {
+                    case "american indian":
+                        return "American Indian or Alaska Native";
+                    case "alaska native":
+                        return "American Indian or Alaska Native";
+                    case "asian":
+                        return "Asian";
+                    case "black":
+                        return "Black or African American";
+                    case "african american":
+                        return "Black or African American";
+                    case "native hawaiian":
+                        return "Native Hawaiian or Other Pacific Islander";
+                    case "other pacific islander":
+                        return "Native Hawaiian or Other Pacific Islander";
+                    case "white":
+                        return "White";
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        string mapRaceCode(string race)
+        {
+            try
+            {
+                switch (race.ToLower())
+                {
+                    case "american indian":
+                        return "1002-5";
+                    case "alaska native":
+                        return "1002-5";
+                    case "asian":
+                        return "2028-9";
+                    case "black":
+                        return "2054-5";
+                    case "african american":
+                        return "2054-5";
+                    case "native hawaiian":
+                        return "2076-8";
+                    case "other pacific islander":
+                        return "2076-8";
+                    case "white":
+                        return "2106-3";
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        string mapEthnicity(string ethnicity)
+        {
+            try
+            {
+                switch (ethnicity.ToLower())
+                {
+                    case "2135-2":
+                        return "Hispanic";
+                    case "2186-5":
+                        return "Non-hispanic";
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -369,7 +369,7 @@ namespace EMRIntegrations.DrChrono
         {
             try
             {
-                switch (race)
+                switch (race.ToLower())
                 {
                     case "black":
                         return "Black or African American";
@@ -399,7 +399,7 @@ namespace EMRIntegrations.DrChrono
         {
             try
             {
-                switch (ethnicity)
+                switch (ethnicity.ToLower())
                 {
                     case "hispanic":
                         return "Hispanic";
