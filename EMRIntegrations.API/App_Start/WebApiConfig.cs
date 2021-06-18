@@ -21,6 +21,18 @@ namespace EMRIntegrations
             //);
 
             config.Routes.MapHttpRoute(
+                name: "GetModuleData",
+                routeTemplate: "api/{controller}/GetModuleData",
+                defaults: new { id = RouteParameter.Optional, Controller = "PullData", Action = "GetModuleData" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "PostDocument",
+                routeTemplate: "api/{controller}/PostDocument",
+                defaults: new { id = RouteParameter.Optional, Controller = "Document", Action = "PostDocument" }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "PostHL7",
                 routeTemplate: "api/{controller}/PostHL7",
                 defaults: new { id = RouteParameter.Optional, Controller = "IntelliHEndPoint", Action = "PostHL7" }
