@@ -67,11 +67,11 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 {
                     if (ex.Message.Contains("Operation was unsuccessful because of a client error (NotFound)."))
                     {
-                        throw new Exception("Error: Operation was unsuccessful because of a client error.");
+                        return dtPatientDemographics;
                     }
                     else
                     {
-                        throw new Exception("Error: " + ex.Message);
+                        throw ex;
                     }
                 }
 
