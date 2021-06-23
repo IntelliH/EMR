@@ -49,16 +49,7 @@ namespace EMRIntegrations.DrChrono
                 request.AddParameter("date", parameters["documentdate"].ToString());
                 request.AddParameter("description", parameters["documentdescription"].ToString());
 
-                IRestResponse response;
-
-                try
-                {
-                    response = client.Execute(request);
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Error: Operation was unsuccessful because of a client error.");
-                }
+                IRestResponse response = client.Execute(request);
 
                 var data = (JObject)JsonConvert.DeserializeObject(response.Content);
 
@@ -128,6 +119,8 @@ namespace EMRIntegrations.DrChrono
 
         public string DataTableToJSONDocumentUpload(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
+            try
+            {
             var JSONString = new StringBuilder();
 
             JSONString.Append("{");
@@ -136,14 +129,17 @@ namespace EMRIntegrations.DrChrono
             JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
             JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
             JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"DocumentLogDetails\":");
-
+            
             if (table.Rows.Count == 0)
             {
-                JSONString.Append("\"No Data Found\"");
+                JSONString.Append("\"Error\":" + "\"No Data Found\",");
+                JSONString.Append("\"DocumentLogDetails\":{}");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
+
+            JSONString.Append("\"Error\":" + "\"\",");
+            JSONString.Append("\"DocumentLogDetails\":");
 
             foreach (DataRow drow in table.Rows)
             {
@@ -159,7 +155,11 @@ namespace EMRIntegrations.DrChrono
                 JSONString.Append("}");
             }
             return JSONString.ToString();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
-
     }
 }

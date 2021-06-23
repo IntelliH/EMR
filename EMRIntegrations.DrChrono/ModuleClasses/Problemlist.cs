@@ -58,17 +58,8 @@ namespace EMRIntegrations.DrChrono
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("cache-control", "no-cache");
                 request.AddHeader("authorization", "bearer:" + parameters["access_token"].ToString() + "");
-                
-                IRestResponse response;
 
-                try
-                {
-                    response = client.Execute(request);
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Error: Operation was unsuccessful because of a client error.");
-                }
+                IRestResponse response = client.Execute(request);
 
                 var data = (JObject)JsonConvert.DeserializeObject(response.Content);
 
@@ -152,58 +143,67 @@ namespace EMRIntegrations.DrChrono
 
         public string DataTableToJSONProblemlist(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Problemlist\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Problemlist Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Problemlist Found\",");
+                    JSONString.Append("\"Problemlist\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Problemlist\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
+                    JSONString.Append("\"DoctorId\":" + "\"" + drow["Doctor"].ToString() + "\",");
+                    JSONString.Append("\"icd_version\":" + "\"" + drow["icd_version"].ToString() + "\",");
+                    JSONString.Append("\"icd_code\":" + "\"" + drow["icd_code"].ToString() + "\",");
+                    JSONString.Append("\"name\":" + "\"" + drow["name"].ToString() + "\",");
+                    JSONString.Append("\"status\":" + "\"" + drow["status"].ToString() + "\",");
+                    JSONString.Append("\"notes\":" + "\"" + drow["notes"].ToString() + "\",");
+                    JSONString.Append("\"date_diagnosis\":" + "\"" + drow["date_diagnosis"].ToString() + "\",");
+                    JSONString.Append("\"date_onset\":" + "\"" + drow["date_onset"].ToString() + "\",");
+                    JSONString.Append("\"date_changed\":" + "\"" + drow["date_changed"].ToString() + "\",");
+                    JSONString.Append("\"description\":" + "\"" + drow["description"].ToString() + "\",");
+                    JSONString.Append("\"snomed_ct_code\":" + "\"" + drow["snomed_ct_code"].ToString() + "\",");
+                    JSONString.Append("\"info_url\":" + "\"" + drow["info_url"].ToString() + "\"");
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
-                JSONString.Append("\"DoctorId\":" + "\"" + drow["Doctor"].ToString() + "\",");
-                JSONString.Append("\"icd_version\":" + "\"" + drow["icd_version"].ToString() + "\",");
-                JSONString.Append("\"icd_code\":" + "\"" + drow["icd_code"].ToString() + "\",");
-                JSONString.Append("\"name\":" + "\"" + drow["name"].ToString() + "\",");
-                JSONString.Append("\"status\":" + "\"" + drow["status"].ToString() + "\",");
-                JSONString.Append("\"notes\":" + "\"" + drow["notes"].ToString() + "\",");
-                JSONString.Append("\"date_diagnosis\":" + "\"" + drow["date_diagnosis"].ToString() + "\",");
-                JSONString.Append("\"date_onset\":" + "\"" + drow["date_onset"].ToString() + "\",");
-                JSONString.Append("\"date_changed\":" + "\"" + drow["date_changed"].ToString() + "\",");
-                JSONString.Append("\"description\":" + "\"" + drow["description"].ToString() + "\",");
-                JSONString.Append("\"snomed_ct_code\":" + "\"" + drow["snomed_ct_code"].ToString() + "\",");
-                JSONString.Append("\"info_url\":" + "\"" + drow["info_url"].ToString() + "\"");
-
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
     }
 }

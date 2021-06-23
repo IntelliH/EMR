@@ -99,9 +99,9 @@ namespace EMRIntegrations.Epic.ModuleClasses
                     // if we have issues we likely got a 404 and thus have no Vital orders...
                     return new DataTable();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw;
                 }
             }
             catch (Exception)
@@ -129,49 +129,58 @@ namespace EMRIntegrations.Epic.ModuleClasses
 
         public string GenerateAPIJSONString(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Vitals\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Vital Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Vital Found\",");
+                    JSONString.Append("\"Vitals\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Vitals\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"EffectiveDate\":" + "\"" + drow["EffectiveDate"].ToString() + "\",");
+                    JSONString.Append("\"Vital\":" + "\"" + drow["Vital"].ToString() + "\",");
+                    JSONString.Append("\"Value\":" + "\"" + drow["Value"].ToString() + "\",");
+                    JSONString.Append("\"Unit\":" + "\"" + drow["Unit"].ToString() + "\"");
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"EffectiveDate\":" + "\"" + drow["EffectiveDate"].ToString() + "\",");
-                JSONString.Append("\"Vital\":" + "\"" + drow["Vital"].ToString() + "\",");
-                JSONString.Append("\"Value\":" + "\"" + drow["Value"].ToString() + "\",");
-                JSONString.Append("\"Unit\":" + "\"" + drow["Unit"].ToString() + "\"");
-                
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
     }
 }

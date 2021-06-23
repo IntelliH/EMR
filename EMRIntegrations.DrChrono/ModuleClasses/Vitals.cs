@@ -76,7 +76,7 @@ namespace EMRIntegrations.DrChrono
                 {
                     if (jtobj.HasValues && jtobj.SelectToken("error") != null)
                     {
-                        throw new Exception("Error: Operation was unsuccessful because of a client error.");
+                        throw new Exception(jtobj["error"].ToString());
                     }
 
                     List<vital> objclinical = jtobj.ToObject<List<vital>>();
@@ -378,8 +378,6 @@ namespace EMRIntegrations.DrChrono
 
             [JsonProperty("encounterid")]
             public string Encounterid { get; set; }
-
-
         }
     }
 }

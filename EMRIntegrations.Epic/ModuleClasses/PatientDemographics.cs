@@ -59,21 +59,7 @@ namespace EMRIntegrations.Epic.ModuleClasses
                 // Read Patient #1
                 Patient objPatient = new Patient();
                 var currentPatient = objPatient;
-                try
-                {
-                    currentPatient = fhirClient.Read<Patient>("Patient/" + parameters["patientid"].ToString() + "");//Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message.Contains("Operation was unsuccessful because of a client error (NotFound)."))
-                    {
-                        throw new Exception("Error: Operation was unsuccessful because of a client error.");
-                    }
-                    else
-                    {
-                        throw new Exception("Error: " + ex.Message);
-                    }
-                }
+                currentPatient = fhirClient.Read<Patient>("Patient/" + parameters["patientid"].ToString() + "");//Tbt3KuCY0B5PSrJvCu2j-PlK.aiHsu2xUjUM8bWpetXoB
 
                 DataRow dRowPatientDemographics = dtPatientDemographics.NewRow();
 
@@ -212,64 +198,74 @@ namespace EMRIntegrations.Epic.ModuleClasses
 
         public string DataTableToJSONPatientDemographics(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"EMRUserExtensionLogDetails\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Patient Found\"");
-                JSONString.Append("}");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Patient Found\",");
+                    JSONString.Append("\"EMRUserExtensionLogDetails\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"EMRUserExtensionLogDetails\":");
+
+                foreach (DataRow drow in table.Rows)
+                {
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"UserId\":" + "\"" + userid + "\",");
+                    JSONString.Append("\"Title\":" + "\"" + drow["Title"].ToString() + "\",");
+                    JSONString.Append("\"FirstName\":" + "\"" + drow["FirstName"].ToString() + "\",");
+                    JSONString.Append("\"MiddleName\":" + "\"" + drow["MiddleName"].ToString() + "\",");
+                    JSONString.Append("\"LastName\":" + "\"" + drow["LastName"].ToString() + "\",");
+                    JSONString.Append("\"Suffix\":" + "\"" + drow["Suffix"].ToString() + "\",");
+                    JSONString.Append("\"Gender\":" + "\"" + drow["Gender"].ToString() + "\",");
+                    JSONString.Append("\"DateOfBirth\":" + "\"" + drow["DateOfBirth"].ToString() + "\",");
+                    JSONString.Append("\"Email\":" + "\"" + drow["Email"].ToString() + "\",");
+                    JSONString.Append("\"Street\":" + "\"\",");
+                    JSONString.Append("\"City\":" + "\"" + drow["City"].ToString() + "\",");
+                    JSONString.Append("\"ZipCode\":" + "\"" + drow["ZipCode"].ToString() + "\",");
+                    JSONString.Append("\"Phone\":" + "\"" + drow["Phone"].ToString() + "\",");
+                    JSONString.Append("\"Address1\":" + "\"" + drow["Address1"].ToString() + "\",");
+                    JSONString.Append("\"Address2\":" + "\"" + drow["Address2"].ToString() + "\",");
+                    JSONString.Append("\"SSN\":" + "\"" + drow["SSN"].ToString() + "\",");
+                    JSONString.Append("\"MRN\":" + "\"" + emrpatientid + "\",");
+                    JSONString.Append("\"State\":" + "\"" + drow["State"].ToString() + "\",");
+                    JSONString.Append("\"Password\":" + "\"\",");
+                    JSONString.Append("\"Role\":" + "\"\",");
+                    JSONString.Append("\"heightFeet\":" + "\"\",");
+                    JSONString.Append("\"heightInch\":" + "\"\",");
+                    JSONString.Append("\"weight\":" + "\"\",");
+                    JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
+                    JSONString.Append("\"StateId\":" + "\"\",");
+                    JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
+                    JSONString.Append("\"Ethnicity\":" + "\"" + mapEthnicity(drow["EthnicityCode"].ToString()) + "\",");
+                    JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
+                    JSONString.Append("\"Race\":" + "\"" + mapRace(drow["RaceCode"].ToString()) + "\",");
+                    JSONString.Append("\"NPI\":" + "\"\",");
+                    JSONString.Append("\"Status\":" + "\"\",");
+                    JSONString.Append("\"POSCode\":" + "\"\"");
+
+                    JSONString.Append("}");
+                    JSONString.Append("}");
+                }
                 return JSONString.ToString();
             }
-
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                JSONString.Append("{");
-
-                JSONString.Append("\"UserId\":" + "\"" + userid + "\",");
-                JSONString.Append("\"Title\":" + "\"" + drow["Title"].ToString() + "\",");
-                JSONString.Append("\"FirstName\":" + "\"" + drow["FirstName"].ToString() + "\",");
-                JSONString.Append("\"MiddleName\":" + "\"" + drow["MiddleName"].ToString() + "\",");
-                JSONString.Append("\"LastName\":" + "\"" + drow["LastName"].ToString() + "\",");
-                JSONString.Append("\"Suffix\":" + "\"" + drow["Suffix"].ToString() + "\",");
-                JSONString.Append("\"Gender\":" + "\"" + drow["Gender"].ToString() + "\",");
-                JSONString.Append("\"DateOfBirth\":" + "\"" + drow["DateOfBirth"].ToString() + "\",");
-                JSONString.Append("\"Email\":" + "\"" + drow["Email"].ToString() + "\",");
-                JSONString.Append("\"Street\":" + "\"\",");
-                JSONString.Append("\"City\":" + "\"" + drow["City"].ToString() + "\",");
-                JSONString.Append("\"ZipCode\":" + "\"" + drow["ZipCode"].ToString() + "\",");
-                JSONString.Append("\"Phone\":" + "\"" + drow["Phone"].ToString() + "\",");
-                JSONString.Append("\"Address1\":" + "\"" + drow["Address1"].ToString() + "\",");
-                JSONString.Append("\"Address2\":" + "\"" + drow["Address2"].ToString() + "\",");
-                JSONString.Append("\"SSN\":" + "\"" + drow["SSN"].ToString() + "\",");
-                JSONString.Append("\"MRN\":" + "\"" + emrpatientid + "\",");
-                JSONString.Append("\"State\":" + "\"" + drow["State"].ToString() + "\",");
-                JSONString.Append("\"Password\":" + "\"\",");
-                JSONString.Append("\"Role\":" + "\"\",");
-                JSONString.Append("\"heightFeet\":" + "\"\",");
-                JSONString.Append("\"heightInch\":" + "\"\",");
-                JSONString.Append("\"weight\":" + "\"\",");
-                JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
-                JSONString.Append("\"StateId\":" + "\"\",");
-                JSONString.Append("\"EthnicityCode\":" + "\"" + drow["EthnicityCode"].ToString() + "\",");
-                JSONString.Append("\"Ethnicity\":" + "\"" + mapEthnicity(drow["EthnicityCode"].ToString()) + "\",");
-                JSONString.Append("\"RaceCode\":" + "\"" + drow["RaceCode"].ToString() + "\",");
-                JSONString.Append("\"Race\":" + "\"" + mapRace(drow["RaceCode"].ToString()) + "\",");
-                JSONString.Append("\"NPI\":" + "\"\",");
-                JSONString.Append("\"Status\":" + "\"\",");
-                JSONString.Append("\"POSCode\":" + "\"\"");
-
-                JSONString.Append("}");
-                JSONString.Append("}");
+                throw;
             }
-            return JSONString.ToString();
         }
 
         string mapRace(string race)

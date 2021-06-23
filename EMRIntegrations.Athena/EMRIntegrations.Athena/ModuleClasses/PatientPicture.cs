@@ -109,7 +109,6 @@ namespace EMRIntegrations.Athena
                 return dtClinicaldata;
             }
             catch (Exception)
-
             {
                 throw;
             }
@@ -134,47 +133,56 @@ namespace EMRIntegrations.Athena
 
         public string DataTableToJSONPictures(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Pictures\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Picture Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Picture Found\",");
+                    JSONString.Append("\"Pictures\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Pictures\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"Base64\":" + "\"" + drow["image"].ToString() + "\"");
+
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"Base64\":" + "\"" + drow["image"].ToString() + "\"");
-
-
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
 
         internal class patientpicture

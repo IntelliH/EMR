@@ -28,7 +28,7 @@ namespace EMRIntegrations.Controllers
                 string UserID = string.Empty;
                 string DepartmentID = "1";
                 string JSONString = string.Empty;
-                
+
                 // Get the variable values from JSON
 
                 oMasterConnection.EMRIntegrationMasterConStr = ConfigurationManager.ConnectionStrings["EMRIntegrationMaster"].ConnectionString;
@@ -348,21 +348,6 @@ namespace EMRIntegrations.Controllers
                                 InitialLog2(EMRID, ModuleID, EMRPatientID, RequestID);
 
                                 DataTable dtPatientData = objDrChronoAPI.GetPatientDemographics(EMRPatientID, oMasterConnection.EmrStagingDBConStr, RequestID, AccessToken);
-                                
-                                if (dtPatientData.Rows.Count == 0)
-                                {
-                                    JSONStringReturn.Append("{");
-                                    JSONStringReturn.Append("\"EMRPatientId\":" + "\"" + EMRPatientID + "\",");
-                                    JSONStringReturn.Append("\"EMRId\":" + "\"" + EMRID + "\",");
-                                    JSONStringReturn.Append("\"ModuleId\":" + "\"" + ModuleID + "\",");
-                                    JSONStringReturn.Append("\"RequestId\":" + "\"" + RequestID + "\",");
-                                    JSONStringReturn.Append("\"CreatedBy\":" + "\"\",");
-                                    JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":");
-                                    JSONStringReturn.Append("\"No Patient Found\"");
-                                    JSONStringReturn.Append("}");
-                                    return JSONStringReturn.ToString();
-                                }
-
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataPulledInMemoryFromEMR, RequestID, EMRID, ModuleID, EMRPatientID);
                                 objDrChronoAPI.SavePatientDemographics(dtPatientData, oMasterConnection.EmrStagingDBConStr, RequestID);
                                 objLog.LogRequest(oMasterConnection, Logs.Status.DataSavedInStagingDatabase, RequestID, EMRID, ModuleID, EMRPatientID);
@@ -408,8 +393,8 @@ namespace EMRIntegrations.Controllers
                                 JSONStringReturn.Append("\"ModuleId\":" + "\"" + ModuleID + "\",");
                                 JSONStringReturn.Append("\"RequestId\":" + "\"" + RequestID + "\",");
                                 JSONStringReturn.Append("\"CreatedBy\":" + "\"\",");
-                                JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":");
-                                JSONStringReturn.Append("\"ModuleID is not Found\"");
+                                JSONStringReturn.Append("\"Error\":" + "\"ModuleID is not found\",");
+                                JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":{}");
                                 JSONStringReturn.Append("}");
                                 return JSONStringReturn.ToString();
                         }
@@ -422,8 +407,8 @@ namespace EMRIntegrations.Controllers
                         JSONStringReturn.Append("\"ModuleId\":" + "\"" + ModuleID + "\",");
                         JSONStringReturn.Append("\"RequestId\":" + "\"" + RequestID + "\",");
                         JSONStringReturn.Append("\"CreatedBy\":" + "\"\",");
-                        JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":");
-                        JSONStringReturn.Append("\"EMRID is not Found\"");
+                        JSONStringReturn.Append("\"Error\":" + "\"EMRID is not Found\",");
+                        JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":{}");
                         JSONStringReturn.Append("}");
                         return JSONStringReturn.ToString();
                 }
@@ -444,8 +429,8 @@ namespace EMRIntegrations.Controllers
                 JSONStringReturn.Append("\"ModuleId\":" + "\"" + ModuleID + "\",");
                 JSONStringReturn.Append("\"RequestId\":" + "\"" + RequestID + "\",");
                 JSONStringReturn.Append("\"CreatedBy\":" + "\"\",");
-                JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":");
-                JSONStringReturn.Append("\""+ ex.Message +"\"");
+                JSONStringReturn.Append("\"Error\":" + "\""+ ex.Message + "\",");
+                JSONStringReturn.Append("\"EMRUserExtensionLogDetails\":{}");
                 JSONStringReturn.Append("}");
                 return JSONStringReturn.ToString();
             }

@@ -73,7 +73,6 @@ namespace EMRIntegrations.Epic.ModuleClasses
         {
             try
             {
-
                 var mySearch = new SearchParams();
                 mySearch.Parameters.Add(new Tuple<string, string>("patient", parameters["patientid"].ToString()));
 
@@ -249,60 +248,69 @@ namespace EMRIntegrations.Epic.ModuleClasses
 
         public string GenerateAPIJSONString(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Medications\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Medication Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Medication Found\",");
+                    JSONString.Append("\"Medications\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Medications\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"CreatedBy\":" + "\"" + drow["Createdby"].ToString() + "\",");
+                    JSONString.Append("\"MedicationID\":" + "\"" + drow["Medicationid"].ToString() + "\",");
+                    JSONString.Append("\"MedicationName\":" + "\"" + drow["MedicationName"].ToString() + "\",");
+                    JSONString.Append("\"Direction\":" + "\"" + drow["Direction"].ToString() + "\",");
+                    JSONString.Append("\"DosageFrequencyValue\":" + "\"" + drow["Dosagefrequencyvalue"].ToString() + "\",");
+                    JSONString.Append("\"DosageRoute\":" + "\"" + drow["dosageroute"].ToString() + "\",");
+                    JSONString.Append("\"DosageAdditionalInstructions\":" + "\"" + drow["Dosageadditionalinstructions"].ToString() + "\",");
+                    JSONString.Append("\"DosageFrequencyUnit\":" + "\"" + drow["Dosagefrequencyunit"].ToString() + "\",");
+                    JSONString.Append("\"DosageUnit\":" + "\"" + drow["DosageUnit"].ToString() + "\",");
+                    JSONString.Append("\"DosageQuantity\":" + "\"" + drow["Dosagequantity"].ToString() + "\",");
+                    JSONString.Append("\"DosageFrequencyDescription\":" + "\"" + drow["Dosagefrequencydescription"].ToString() + "\",");
+                    JSONString.Append("\"DosageDurationUnit\":" + "\"" + drow["Dosagedurationunit"].ToString() + "\",");
+                    JSONString.Append("\"StopDate\":" + "\"" + drow["Stopdate"].ToString() + "\",");
+                    JSONString.Append("\"StartDate\":" + "\"" + drow["Startdate"].ToString() + "\",");
+                    JSONString.Append("\"EnterDate\":" + "\"" + drow["Enterdate"].ToString() + "\"");
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"CreatedBy\":" + "\"" + drow["Createdby"].ToString() + "\",");
-                JSONString.Append("\"MedicationID\":" + "\"" + drow["Medicationid"].ToString() + "\",");
-                JSONString.Append("\"MedicationName\":" + "\"" + drow["MedicationName"].ToString() + "\",");
-                JSONString.Append("\"Direction\":" + "\"" + drow["Direction"].ToString() + "\",");
-                JSONString.Append("\"DosageFrequencyValue\":" + "\"" + drow["Dosagefrequencyvalue"].ToString() + "\",");
-                JSONString.Append("\"DosageRoute\":" + "\"" + drow["dosageroute"].ToString() + "\",");
-                JSONString.Append("\"DosageAdditionalInstructions\":" + "\"" + drow["Dosageadditionalinstructions"].ToString() + "\",");
-                JSONString.Append("\"DosageFrequencyUnit\":" + "\"" + drow["Dosagefrequencyunit"].ToString() + "\",");
-                JSONString.Append("\"DosageUnit\":" + "\"" + drow["DosageUnit"].ToString() + "\",");
-                JSONString.Append("\"DosageQuantity\":" + "\"" + drow["Dosagequantity"].ToString() + "\",");
-                JSONString.Append("\"DosageFrequencyDescription\":" + "\"" + drow["Dosagefrequencydescription"].ToString() + "\",");
-                JSONString.Append("\"DosageDurationUnit\":" + "\"" + drow["Dosagedurationunit"].ToString() + "\",");
-                JSONString.Append("\"StopDate\":" + "\"" + drow["Stopdate"].ToString() + "\",");
-                JSONString.Append("\"StartDate\":" + "\"" + drow["Startdate"].ToString() + "\",");
-                JSONString.Append("\"EnterDate\":" + "\"" + drow["Enterdate"].ToString() + "\"");
-
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
     }
 }

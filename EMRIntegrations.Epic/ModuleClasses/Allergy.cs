@@ -134,57 +134,66 @@ namespace EMRIntegrations.Epic.ModuleClasses
 
         public string DataTableToJSONAllergy(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Allergy\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Allergy Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Allergy Found\",");
+                    JSONString.Append("\"Allergy\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Allergy\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"allergicto\":" + "\"" + drow["Allergicto"].ToString() + "\",");
+                    JSONString.Append("\"Reaction\":" + "\"" + drow["Reaction"].ToString() + "\",");
+                    JSONString.Append("\"Reactionsnomedcode\":" + "\"\",");
+                    JSONString.Append("\"Severity\":" + "\"" + drow["Severity"].ToString() + "\",");
+                    JSONString.Append("\"Note\":" + "\"" + drow["Note"].ToString() + "\",");
+                    JSONString.Append("\"Onsetdate\":" + "\"" + drow["Onsetdate"].ToString() + "\",");
+                    JSONString.Append("\"Severitysnomedcode\":" + "\"\",");
+                    JSONString.Append("\"Encounterid\":" + "\"\",");
+                    JSONString.Append("\"Deactivatedate\":" + "\"\",");
+                    JSONString.Append("\"patientid\":" + "\"" + drow["patientid"].ToString() + "\",");
+                    JSONString.Append("\"admitflag\":" + "\"" + drow["admitflag"].ToString() + "\",");
+                    JSONString.Append("\"daterecorded\":" + "\"" + drow["daterecorded"].ToString() + "\",");
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"allergicto\":" + "\"" + drow["Allergicto"].ToString() + "\",");
-                JSONString.Append("\"Reaction\":" + "\"" + drow["Reaction"].ToString() + "\",");
-                JSONString.Append("\"Reactionsnomedcode\":" + "\"\",");
-                JSONString.Append("\"Severity\":" + "\"" + drow["Severity"].ToString() + "\",");
-                JSONString.Append("\"Note\":" + "\"" + drow["Note"].ToString() + "\",");
-                JSONString.Append("\"Onsetdate\":" + "\"" + drow["Onsetdate"].ToString() + "\",");
-                JSONString.Append("\"Severitysnomedcode\":" + "\"\",");
-                JSONString.Append("\"Encounterid\":" + "\"\",");
-                JSONString.Append("\"Deactivatedate\":" + "\"\",");
-                JSONString.Append("\"patientid\":" + "\"" + drow["patientid"].ToString() + "\",");
-                JSONString.Append("\"admitflag\":" + "\"" + drow["admitflag"].ToString() + "\",");
-                JSONString.Append("\"daterecorded\":" + "\"" + drow["daterecorded"].ToString() + "\",");
-
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
 
         public string GenerateAPIJSONString(DataTable dtAllergy, string EMRPatientID, string RequestID, string EMRID, string ModuleID, string UserID)

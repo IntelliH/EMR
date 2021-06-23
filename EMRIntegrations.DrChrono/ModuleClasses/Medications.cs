@@ -54,16 +54,7 @@ namespace EMRIntegrations.DrChrono
                 request.AddHeader("cache-control", "no-cache");
                 request.AddHeader("authorization", "bearer:" + parameters["access_token"].ToString() + "");
 
-                IRestResponse response;
-
-                try
-                {
-                    response = client.Execute(request);
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Error: Operation was unsuccessful because of a client error.");
-                }
+                IRestResponse response = client.Execute(request);
 
                 var data = (JObject)JsonConvert.DeserializeObject(response.Content);
 
@@ -177,83 +168,92 @@ namespace EMRIntegrations.DrChrono
 
         public string DataTableToJSONMedications(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Medications\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Medication Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Medication Found\",");
+                    JSONString.Append("\"Medications\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Medications\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"CreatedBy\":" + "\"\",");
+                    JSONString.Append("\"MedicationID\":" + "\"" + drow["Id"].ToString() + "\",");
+                    JSONString.Append("\"MedicationName\":" + "\"" + drow["Name"].ToString() + "\",");
+                    JSONString.Append("\"Direction\":" + "\"\",");
+                    JSONString.Append("\"DosageFrequencyValue\":" + "\"" + drow["Frequency"].ToString() + "\",");
+                    JSONString.Append("\"DosageRoute\":" + "\"" + drow["Route"].ToString() + "\",");
+                    JSONString.Append("\"DosageAdditionalInstructions\":" + "\"" + drow["Notes"].ToString() + "\",");
+                    JSONString.Append("\"DosageFrequencyUnit\":" + "\"\",");
+                    JSONString.Append("\"DosageUnit\":" + "\"" + drow["Dosage_units"].ToString() + "\",");
+                    JSONString.Append("\"DosageQuantity\":" + "\"" + drow["Dosage_quantity"].ToString() + "\",");
+                    JSONString.Append("\"DosageFrequencyDescription\":" + "\"\",");
+                    JSONString.Append("\"DosageDurationUnit\":" + "\"" + drow["Dispense_quantity"].ToString() + "\",");
+
+                    if (!string.IsNullOrEmpty(drow["Date_stopped_taking"].ToString()))
+                    {
+                        string res = drow["Date_stopped_taking"].ToString().Replace("-", string.Empty);
+                        DateTime d = DateTime.ParseExact(res, "yyyyMMdd", CultureInfo.InvariantCulture);
+                        drow["Date_stopped_taking"] = d.ToString("MM/dd/yyyy").Replace("-", "/");
+                        JSONString.Append("\"StopDate\":" + "\"" + drow["Date_stopped_taking"].ToString() + "\",");
+                    }
+                    else
+                    {
+                        JSONString.Append("\"StopDate\":" + "\"\",");
+                    }
+
+                    if (!string.IsNullOrEmpty(drow["Date_started_taking"].ToString()))
+                    {
+                        string res = drow["Date_started_taking"].ToString().Replace("-", string.Empty);
+                        DateTime d = DateTime.ParseExact(res, "yyyyMMdd", CultureInfo.InvariantCulture);
+                        drow["Date_started_taking"] = d.ToString("MM/dd/yyyy").Replace("-", "/");
+                        JSONString.Append("\"StartDate\":" + "\"" + drow["Date_started_taking"].ToString() + "\",");
+                    }
+                    else
+                    {
+                        JSONString.Append("\"StartDate\":" + "\"\",");
+                    }
+
+                    JSONString.Append("\"EnterDate\":" + "\"\"");
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"CreatedBy\":" + "\"\",");
-                JSONString.Append("\"MedicationID\":" + "\"" + drow["Id"].ToString() + "\",");
-                JSONString.Append("\"MedicationName\":" + "\"" + drow["Name"].ToString() + "\",");
-                JSONString.Append("\"Direction\":" + "\"\",");
-                JSONString.Append("\"DosageFrequencyValue\":" + "\"" + drow["Frequency"].ToString() + "\",");
-                JSONString.Append("\"DosageRoute\":" + "\"" + drow["Route"].ToString() + "\",");
-                JSONString.Append("\"DosageAdditionalInstructions\":" + "\"" + drow["Notes"].ToString() + "\",");
-                JSONString.Append("\"DosageFrequencyUnit\":" + "\"\",");
-                JSONString.Append("\"DosageUnit\":" + "\"" + drow["Dosage_units"].ToString() + "\",");
-                JSONString.Append("\"DosageQuantity\":" + "\"" + drow["Dosage_quantity"].ToString() + "\",");
-                JSONString.Append("\"DosageFrequencyDescription\":" + "\"\",");
-                JSONString.Append("\"DosageDurationUnit\":" + "\"" + drow["Dispense_quantity"].ToString() + "\",");
-
-                if (!string.IsNullOrEmpty(drow["Date_stopped_taking"].ToString()))
-                {
-                    string res = drow["Date_stopped_taking"].ToString().Replace("-", string.Empty);
-                    DateTime d = DateTime.ParseExact(res, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    drow["Date_stopped_taking"] = d.ToString("MM/dd/yyyy").Replace("-", "/");
-                    JSONString.Append("\"StopDate\":" + "\"" + drow["Date_stopped_taking"].ToString() + "\",");
-                }
-                else
-                {
-                    JSONString.Append("\"StopDate\":" + "\"\",");
-                }
-
-                if (!string.IsNullOrEmpty(drow["Date_started_taking"].ToString()))
-                {
-                    string res = drow["Date_started_taking"].ToString().Replace("-", string.Empty);
-                    DateTime d = DateTime.ParseExact(res, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    drow["Date_started_taking"] = d.ToString("MM/dd/yyyy").Replace("-", "/");
-                    JSONString.Append("\"StartDate\":" + "\"" + drow["Date_started_taking"].ToString() + "\",");
-                }
-                else
-                {
-                    JSONString.Append("\"StartDate\":" + "\"\",");
-                }
-
-                JSONString.Append("\"EnterDate\":" + "\"\"");
-
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
     }
 }

@@ -59,16 +59,7 @@ namespace EMRIntegrations.DrChrono
                 request.AddHeader("cache-control", "no-cache");
                 request.AddHeader("authorization", "bearer:" + parameters["access_token"].ToString() + "");
 
-                IRestResponse response;
-
-                try
-                {
-                    response = client.Execute(request);
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Error: Operation was unsuccessful because of a client error.");
-                }
+                IRestResponse response = client.Execute(request);
 
                 var data = (JObject)JsonConvert.DeserializeObject(response.Content);
 
@@ -137,54 +128,63 @@ namespace EMRIntegrations.DrChrono
 
         public string DataTableToJSONAllergy(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Allergies\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Allergy Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Allergy Found\",");
+                    JSONString.Append("\"Allergies\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Allergies\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
+                    JSONString.Append("\"Substance\":" + "\"" + drow["Description"].ToString() + "\",");
+                    JSONString.Append("\"Reaction\":" + "\"" + drow["Reaction"].ToString() + "\",");
+                    JSONString.Append("\"Severity\":" + "\"\",");
+                    JSONString.Append("\"ReportedOn\":" + "\"\",");
+                    JSONString.Append("\"AllergyGenCode \":" + "\"\",");
+                    JSONString.Append("\"RxNormCode \":" + "\"" + drow["RxNorm"].ToString() + "\",");
+                    JSONString.Append("\"AllergyStatus\":" + "\"" + drow["Status"].ToString() + "\",");
+                    JSONString.Append("\"Note\":" + "\"" + drow["Notes"].ToString() + "\"");
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"Id\":" + "\"" + drow["Id"].ToString() + "\",");
-                JSONString.Append("\"Substance\":" + "\"" + drow["Description"].ToString() + "\",");
-                JSONString.Append("\"Reaction\":" + "\"" + drow["Reaction"].ToString() + "\",");
-                JSONString.Append("\"Severity\":" + "\"\",");
-                JSONString.Append("\"ReportedOn\":" + "\"\",");
-                JSONString.Append("\"AllergyGenCode \":" + "\"\",");
-                JSONString.Append("\"RxNormCode \":" + "\"" + drow["RxNorm"].ToString() + "\",");
-                JSONString.Append("\"AllergyStatus\":" + "\""+ drow["Status"].ToString() + "\",");
-                JSONString.Append("\"Note\":" + "\"" + drow["Notes"].ToString() + "\"");
-                
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
     }
 }

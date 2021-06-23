@@ -238,7 +238,7 @@ namespace EMRIntegrations.DrChrono
                 }
                 dtClinicaldata = dtClinicaldata.DefaultView.ToTable(true);
                 dtClinicaldata.TableName = strModuleName;
-                
+
                 return dtClinicaldata;
             }
             catch (Exception)
@@ -488,148 +488,156 @@ namespace EMRIntegrations.DrChrono
 
         public string DataTableToJSONInsurances(DataTable table, string emrpatientid, string requestid, string emrid, string moduleid, string userid)
         {
-            var JSONString = new StringBuilder();
-
-            JSONString.Append("{");
-            JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
-            JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
-            JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
-            JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
-            JSONString.Append("\"CreatedBy\":" + "\"\",");
-            JSONString.Append("\"Insurances\":");
-
-            if (table.Rows.Count == 0)
+            try
             {
-                JSONString.Append("\"No Insurance Found\"");
+                var JSONString = new StringBuilder();
+
+                JSONString.Append("{");
+                JSONString.Append("\"EMRPatientId\":" + "\"" + emrpatientid + "\",");
+                JSONString.Append("\"EMRId\":" + "\"" + emrid + "\",");
+                JSONString.Append("\"ModuleId\":" + "\"" + moduleid + "\",");
+                JSONString.Append("\"RequestId\":" + "\"" + requestid + "\",");
+                JSONString.Append("\"CreatedBy\":" + "\"\",");
+                
+                if (table.Rows.Count == 0)
+                {
+                    JSONString.Append("\"Error\":" + "\"No Insurance Found\",");
+                    JSONString.Append("\"Insurances\":{}");
+                    JSONString.Append("}");
+                    return JSONString.ToString();
+                }
+
+                JSONString.Append("\"Error\":" + "\"\",");
+                JSONString.Append("\"Insurances\":");
+                JSONString.Append("[");
+
+                int counter = 0;
+                foreach (DataRow drow in table.Rows)
+                {
+                    counter++;
+
+                    JSONString.Append("{");
+
+                    JSONString.Append("\"createdt\":" + "\"" + drow["createdt"].ToString() + "\",");
+                    JSONString.Append("\"icode1\":" + "\"" + drow["icode1"].ToString() + "\",");
+                    JSONString.Append("\"iname1\":" + "\"" + drow["iname1"].ToString() + "\",");
+                    JSONString.Append("\"iaddr1a\":" + "\"" + drow["iaddr1a"].ToString() + "\",");
+                    JSONString.Append("\"iaddr1b\":" + "\"" + drow["iaddr1b"].ToString() + "\",");
+                    JSONString.Append("\"icity1\":" + "\"" + drow["icity1"].ToString() + "\",");
+                    JSONString.Append("\"istate1\":" + "\"" + drow["istate1"].ToString() + "\",");
+                    JSONString.Append("\"izip1\":" + "\"" + drow["izip1"].ToString() + "\",");
+                    JSONString.Append("\"iphone1\":" + "\"" + drow["iphone1"].ToString() + "\",");
+                    JSONString.Append("\"original_iphone1\":" + "\"" + drow["original_iphone1"].ToString() + "\",");
+                    JSONString.Append("\"ifax1\":" + "\"" + drow["ifax1"].ToString() + "\",");
+                    JSONString.Append("\"ipolicy1\":" + "\"" + drow["ipolicy1"].ToString() + "\",");
+                    JSONString.Append("\"igroup1\":" + "\"" + drow["igroup1"].ToString() + "\",");
+                    JSONString.Append("\"igroupname1\":" + "\"" + drow["igroupname1"].ToString() + "\",");
+                    JSONString.Append("\"irela2hld1\":" + "\"" + drow["irela2hld1"].ToString() + "\",");
+                    JSONString.Append("\"original_irela2hld1\":" + "\"" + drow["original_irela2hld1"].ToString() + "\",");
+                    JSONString.Append("\"itype1\":" + "\"" + drow["itype1"].ToString() + "\",");
+                    JSONString.Append("\"iactive1\":" + "\"" + drow["iactive1"].ToString() + "\",");
+                    JSONString.Append("\"ibegin1\":" + "\"" + drow["ibegin1"].ToString() + "\",");
+                    JSONString.Append("\"iend1\":" + "\"" + drow["iend1"].ToString() + "\",");
+                    JSONString.Append("\"ihcode1\":" + "\"" + drow["ihcode1"].ToString() + "\",");
+                    JSONString.Append("\"ihname1\":" + "\"" + drow["ihname1"].ToString() + "\",");
+                    JSONString.Append("\"ihlname1\":" + "\"" + drow["ihlname1"].ToString() + "\",");
+                    JSONString.Append("\"ihfname1\":" + "\"" + drow["ihfname1"].ToString() + "\",");
+                    JSONString.Append("\"ihminit1\":" + "\"" + drow["ihminit1"].ToString() + "\",");
+                    JSONString.Append("\"ihaddr1a\":" + "\"" + drow["ihaddr1a"].ToString() + "\",");
+                    JSONString.Append("\"ihaddr1b\":" + "\"" + drow["ihaddr1b"].ToString() + "\",");
+                    JSONString.Append("\"ihcity1\":" + "\"" + drow["ihcity1"].ToString() + "\",");
+                    JSONString.Append("\"ihstate1\":" + "\"" + drow["ihstate1"].ToString() + "\",");
+                    JSONString.Append("\"ihzip1\":" + "\"" + drow["ihzip1"].ToString() + "\",");
+                    JSONString.Append("\"ihhomephn1\":" + "\"" + drow["ihhomephn1"].ToString() + "\",");
+                    JSONString.Append("\"ihworkphn1\":" + "\"" + drow["ihworkphn1"].ToString() + "\",");
+                    JSONString.Append("\"ihdob1\":" + "\"" + drow["ihdob1"].ToString() + "\",");
+                    JSONString.Append("\"ihsex1\":" + "\"" + drow["ihsex1"].ToString() + "\",");
+                    JSONString.Append("\"ihssn1\":" + "\"" + drow["ihssn1"].ToString() + "\",");
+                    JSONString.Append("\"hid1\":" + "\"" + drow["hid1"].ToString() + "\",");
+                    JSONString.Append("\"ih1employer\":" + "\"" + drow["ih1employer"].ToString() + "\",");
+                    JSONString.Append("\"ih1emplid\":" + "\"" + drow["ih1emplid"].ToString() + "\",");
+                    JSONString.Append("\"ih1eaddr1\":" + "\"" + drow["ih1eaddr1"].ToString() + "\",");
+                    JSONString.Append("\"ih1eaddr2\":" + "\"" + drow["ih1eaddr2"].ToString() + "\",");
+                    JSONString.Append("\"ih1ecity\":" + "\"" + drow["ih1ecity"].ToString() + "\",");
+                    JSONString.Append("\"ih1estate\":" + "\"" + drow["ih1estate"].ToString() + "\",");
+                    JSONString.Append("\"ih1ezip\":" + "\"" + drow["ih1ezip"].ToString() + "\",");
+                    JSONString.Append("\"ih1ephone\":" + "\"" + drow["ih1ephone"].ToString() + "\",");
+                    JSONString.Append("\"ih1efax\":" + "\"" + drow["ih1efax"].ToString() + "\",");
+                    JSONString.Append("\"icode2\":" + "\"" + drow["icode2"].ToString() + "\",");
+                    JSONString.Append("\"iname2\":" + "\"" + drow["iname2"].ToString() + "\",");
+                    JSONString.Append("\"iaddr2a\":" + "\"" + drow["iaddr2a"].ToString() + "\",");
+                    JSONString.Append("\"iaddr2b\":" + "\"" + drow["iaddr2b"].ToString() + "\",");
+                    JSONString.Append("\"icity2\":" + "\"" + drow["icity2"].ToString() + "\",");
+                    JSONString.Append("\"istate2\":" + "\"" + drow["istate2"].ToString() + "\",");
+                    JSONString.Append("\"izip2\":" + "\"" + drow["izip2"].ToString() + "\",");
+                    JSONString.Append("\"iphone2\":" + "\"" + drow["iphone2"].ToString() + "\",");
+                    JSONString.Append("\"original_iphone2\":" + "\"" + drow["original_iphone2"].ToString() + "\",");
+                    JSONString.Append("\"ifax2\":" + "\"" + drow["ifax2"].ToString() + "\",");
+                    JSONString.Append("\"ipolicy2\":" + "\"" + drow["ipolicy2"].ToString() + "\",");
+                    JSONString.Append("\"igroup2\":" + "\"" + drow["igroup2"].ToString() + "\",");
+                    JSONString.Append("\"igroupname2\":" + "\"" + drow["igroupname2"].ToString() + "\",");
+                    JSONString.Append("\"irela2hld2\":" + "\"" + drow["irela2hld2"].ToString() + "\",");
+                    JSONString.Append("\"original_irela2hld2\":" + "\"" + drow["original_irela2hld2"].ToString() + "\",");
+                    JSONString.Append("\"itype2\":" + "\"" + drow["itype2"].ToString() + "\",");
+                    JSONString.Append("\"iactive2\":" + "\"" + drow["iactive2"].ToString() + "\",");
+                    JSONString.Append("\"ibegin2\":" + "\"" + drow["ibegin2"].ToString() + "\",");
+                    JSONString.Append("\"iend2\":" + "\"" + drow["iend2"].ToString() + "\",");
+                    JSONString.Append("\"ihcode2\":" + "\"" + drow["ihcode2"].ToString() + "\",");
+                    JSONString.Append("\"ihname2\":" + "\"" + drow["ihname2"].ToString() + "\",");
+                    JSONString.Append("\"ihlname2\":" + "\"" + drow["ihlname2"].ToString() + "\",");
+                    JSONString.Append("\"ihfname2\":" + "\"" + drow["ihfname2"].ToString() + "\",");
+                    JSONString.Append("\"ihminit2\":" + "\"" + drow["ihminit2"].ToString() + "\",");
+                    JSONString.Append("\"ihaddr2a\":" + "\"" + drow["ihaddr2a"].ToString() + "\",");
+                    JSONString.Append("\"ihaddr2b\":" + "\"" + drow["ihaddr2b"].ToString() + "\",");
+                    JSONString.Append("\"ihcity2\":" + "\"" + drow["ihcity2"].ToString() + "\",");
+                    JSONString.Append("\"ihstate2\":" + "\"" + drow["ihstate2"].ToString() + "\",");
+                    JSONString.Append("\"ihzip2\":" + "\"" + drow["ihzip2"].ToString() + "\",");
+                    JSONString.Append("\"ihhomephn2\":" + "\"" + drow["ihhomephn2"].ToString() + "\",");
+                    JSONString.Append("\"ihworkphn2\":" + "\"" + drow["ihworkphn2"].ToString() + "\",");
+                    JSONString.Append("\"ihdob2\":" + "\"" + drow["ihdob2"].ToString() + "\",");
+                    JSONString.Append("\"ihsex2\":" + "\"" + drow["ihsex2"].ToString() + "\",");
+                    JSONString.Append("\"ihssn2\":" + "\"" + drow["ihssn2"].ToString() + "\",");
+                    JSONString.Append("\"hid2\":" + "\"" + drow["hid2"].ToString() + "\",");
+                    JSONString.Append("\"ih2employer\":" + "\"" + drow["ih2employer"].ToString() + "\",");
+                    JSONString.Append("\"ih2emplid\":" + "\"" + drow["ih2emplid"].ToString() + "\",");
+                    JSONString.Append("\"ih2eaddr1\":" + "\"" + drow["ih2eaddr1"].ToString() + "\",");
+                    JSONString.Append("\"ih2eaddr2\":" + "\"" + drow["ih2eaddr2"].ToString() + "\",");
+                    JSONString.Append("\"ih2ecity\":" + "\"" + drow["ih2ecity"].ToString() + "\",");
+                    JSONString.Append("\"ih2estate\":" + "\"" + drow["ih2estate"].ToString() + "\",");
+                    JSONString.Append("\"ih2ezip\":" + "\"" + drow["ih2ezip"].ToString() + "\",");
+                    JSONString.Append("\"ih2ephone\":" + "\"" + drow["ih2ephone"].ToString() + "\",");
+                    JSONString.Append("\"ih2efax\":" + "\"" + drow["ih2efax"].ToString() + "\",");
+                    JSONString.Append("\"original_ihworkphn1\":" + "\"" + drow["original_ihworkphn1"].ToString() + "\",");
+                    JSONString.Append("\"original_ihhomephn1\":" + "\"" + drow["original_ihhomephn1"].ToString() + "\",");
+                    JSONString.Append("\"original_ihworkphn2\":" + "\"" + drow["original_ihworkphn2"].ToString() + "\",");
+                    JSONString.Append("\"original_ihhomephn2\":" + "\"" + drow["original_ihhomephn2"].ToString() + "\",");
+                    JSONString.Append("\"ihcellphone1\":" + "\"" + drow["ihcellphone1"].ToString() + "\",");
+                    JSONString.Append("\"ihcellphone2\":" + "\"" + drow["ihcellphone2"].ToString() + "\",");
+                    JSONString.Append("\"icomments1\":" + "\"" + drow["icomments1"].ToString() + "\",");
+                    JSONString.Append("\"icomments2\":" + "\"" + drow["icomments2"].ToString() + "\",");
+                    JSONString.Append("\"Insurancetype\":" + "\"" + drow["Insurancetype"].ToString() + "\",");
+                    JSONString.Append("\"Eligibilityreason\":" + "\"" + drow["Eligibilityreason"].ToString() + "\",");
+                    JSONString.Append("\"Ircname\":" + "\"" + drow["Ircname"].ToString() + "\",");
+                    JSONString.Append("\"Relationshiptoinsuredid\":" + "\"" + drow["Relationshiptoinsuredid"].ToString() + "\",");
+                    JSONString.Append("\"Eligibilitymessage\":" + "\"" + drow["Eligibilitymessage"].ToString() + "\"");
+
+                    if (counter == table.Rows.Count)
+                    {
+                        JSONString.Append("}");
+                    }
+                    else
+                    {
+                        JSONString.Append("},");
+                    }
+                }
+                JSONString.Append("]");
                 JSONString.Append("}");
                 return JSONString.ToString();
             }
-
-            JSONString.Append("[");
-
-            int counter = 0;
-            foreach (DataRow drow in table.Rows)
+            catch (Exception)
             {
-                counter++;
-
-                JSONString.Append("{");
-
-                JSONString.Append("\"createdt\":" + "\"" + drow["createdt"].ToString() + "\",");
-                JSONString.Append("\"icode1\":" + "\"" + drow["icode1"].ToString() + "\",");
-                JSONString.Append("\"iname1\":" + "\"" + drow["iname1"].ToString() + "\",");
-                JSONString.Append("\"iaddr1a\":" + "\"" + drow["iaddr1a"].ToString() + "\",");
-                JSONString.Append("\"iaddr1b\":" + "\"" + drow["iaddr1b"].ToString() + "\",");
-                JSONString.Append("\"icity1\":" + "\"" + drow["icity1"].ToString() + "\",");
-                JSONString.Append("\"istate1\":" + "\"" + drow["istate1"].ToString() + "\",");
-                JSONString.Append("\"izip1\":" + "\"" + drow["izip1"].ToString() + "\",");
-                JSONString.Append("\"iphone1\":" + "\"" + drow["iphone1"].ToString() + "\",");
-                JSONString.Append("\"original_iphone1\":" + "\"" + drow["original_iphone1"].ToString() + "\",");
-                JSONString.Append("\"ifax1\":" + "\"" + drow["ifax1"].ToString() + "\",");
-                JSONString.Append("\"ipolicy1\":" + "\"" + drow["ipolicy1"].ToString() + "\",");
-                JSONString.Append("\"igroup1\":" + "\"" + drow["igroup1"].ToString() + "\",");
-                JSONString.Append("\"igroupname1\":" + "\"" + drow["igroupname1"].ToString() + "\",");
-                JSONString.Append("\"irela2hld1\":" + "\"" + drow["irela2hld1"].ToString() + "\",");
-                JSONString.Append("\"original_irela2hld1\":" + "\"" + drow["original_irela2hld1"].ToString() + "\",");
-                JSONString.Append("\"itype1\":" + "\"" + drow["itype1"].ToString() + "\",");
-                JSONString.Append("\"iactive1\":" + "\"" + drow["iactive1"].ToString() + "\",");
-                JSONString.Append("\"ibegin1\":" + "\"" + drow["ibegin1"].ToString() + "\",");
-                JSONString.Append("\"iend1\":" + "\"" + drow["iend1"].ToString() + "\",");
-                JSONString.Append("\"ihcode1\":" + "\"" + drow["ihcode1"].ToString() + "\",");
-                JSONString.Append("\"ihname1\":" + "\"" + drow["ihname1"].ToString() + "\",");
-                JSONString.Append("\"ihlname1\":" + "\"" + drow["ihlname1"].ToString() + "\",");
-                JSONString.Append("\"ihfname1\":" + "\"" + drow["ihfname1"].ToString() + "\",");
-                JSONString.Append("\"ihminit1\":" + "\"" + drow["ihminit1"].ToString() + "\",");
-                JSONString.Append("\"ihaddr1a\":" + "\"" + drow["ihaddr1a"].ToString() + "\",");
-                JSONString.Append("\"ihaddr1b\":" + "\"" + drow["ihaddr1b"].ToString() + "\",");
-                JSONString.Append("\"ihcity1\":" + "\"" + drow["ihcity1"].ToString() + "\",");
-                JSONString.Append("\"ihstate1\":" + "\"" + drow["ihstate1"].ToString() + "\",");
-                JSONString.Append("\"ihzip1\":" + "\"" + drow["ihzip1"].ToString() + "\",");
-                JSONString.Append("\"ihhomephn1\":" + "\"" + drow["ihhomephn1"].ToString() + "\",");
-                JSONString.Append("\"ihworkphn1\":" + "\"" + drow["ihworkphn1"].ToString() + "\",");
-                JSONString.Append("\"ihdob1\":" + "\"" + drow["ihdob1"].ToString() + "\",");
-                JSONString.Append("\"ihsex1\":" + "\"" + drow["ihsex1"].ToString() + "\",");
-                JSONString.Append("\"ihssn1\":" + "\"" + drow["ihssn1"].ToString() + "\",");
-                JSONString.Append("\"hid1\":" + "\"" + drow["hid1"].ToString() + "\",");
-                JSONString.Append("\"ih1employer\":" + "\"" + drow["ih1employer"].ToString() + "\",");
-                JSONString.Append("\"ih1emplid\":" + "\"" + drow["ih1emplid"].ToString() + "\",");
-                JSONString.Append("\"ih1eaddr1\":" + "\"" + drow["ih1eaddr1"].ToString() + "\",");
-                JSONString.Append("\"ih1eaddr2\":" + "\"" + drow["ih1eaddr2"].ToString() + "\",");
-                JSONString.Append("\"ih1ecity\":" + "\"" + drow["ih1ecity"].ToString() + "\",");
-                JSONString.Append("\"ih1estate\":" + "\"" + drow["ih1estate"].ToString() + "\",");
-                JSONString.Append("\"ih1ezip\":" + "\"" + drow["ih1ezip"].ToString() + "\",");
-                JSONString.Append("\"ih1ephone\":" + "\"" + drow["ih1ephone"].ToString() + "\",");
-                JSONString.Append("\"ih1efax\":" + "\"" + drow["ih1efax"].ToString() + "\",");
-                JSONString.Append("\"icode2\":" + "\"" + drow["icode2"].ToString() + "\",");
-                JSONString.Append("\"iname2\":" + "\"" + drow["iname2"].ToString() + "\",");
-                JSONString.Append("\"iaddr2a\":" + "\"" + drow["iaddr2a"].ToString() + "\",");
-                JSONString.Append("\"iaddr2b\":" + "\"" + drow["iaddr2b"].ToString() + "\",");
-                JSONString.Append("\"icity2\":" + "\"" + drow["icity2"].ToString() + "\",");
-                JSONString.Append("\"istate2\":" + "\"" + drow["istate2"].ToString() + "\",");
-                JSONString.Append("\"izip2\":" + "\"" + drow["izip2"].ToString() + "\",");
-                JSONString.Append("\"iphone2\":" + "\"" + drow["iphone2"].ToString() + "\",");
-                JSONString.Append("\"original_iphone2\":" + "\"" + drow["original_iphone2"].ToString() + "\",");
-                JSONString.Append("\"ifax2\":" + "\"" + drow["ifax2"].ToString() + "\",");
-                JSONString.Append("\"ipolicy2\":" + "\"" + drow["ipolicy2"].ToString() + "\",");
-                JSONString.Append("\"igroup2\":" + "\"" + drow["igroup2"].ToString() + "\",");
-                JSONString.Append("\"igroupname2\":" + "\"" + drow["igroupname2"].ToString() + "\",");
-                JSONString.Append("\"irela2hld2\":" + "\"" + drow["irela2hld2"].ToString() + "\",");
-                JSONString.Append("\"original_irela2hld2\":" + "\"" + drow["original_irela2hld2"].ToString() + "\",");
-                JSONString.Append("\"itype2\":" + "\"" + drow["itype2"].ToString() + "\",");
-                JSONString.Append("\"iactive2\":" + "\"" + drow["iactive2"].ToString() + "\",");
-                JSONString.Append("\"ibegin2\":" + "\"" + drow["ibegin2"].ToString() + "\",");
-                JSONString.Append("\"iend2\":" + "\"" + drow["iend2"].ToString() + "\",");
-                JSONString.Append("\"ihcode2\":" + "\"" + drow["ihcode2"].ToString() + "\",");
-                JSONString.Append("\"ihname2\":" + "\"" + drow["ihname2"].ToString() + "\",");
-                JSONString.Append("\"ihlname2\":" + "\"" + drow["ihlname2"].ToString() + "\",");
-                JSONString.Append("\"ihfname2\":" + "\"" + drow["ihfname2"].ToString() + "\",");
-                JSONString.Append("\"ihminit2\":" + "\"" + drow["ihminit2"].ToString() + "\",");
-                JSONString.Append("\"ihaddr2a\":" + "\"" + drow["ihaddr2a"].ToString() + "\",");
-                JSONString.Append("\"ihaddr2b\":" + "\"" + drow["ihaddr2b"].ToString() + "\",");
-                JSONString.Append("\"ihcity2\":" + "\"" + drow["ihcity2"].ToString() + "\",");
-                JSONString.Append("\"ihstate2\":" + "\"" + drow["ihstate2"].ToString() + "\",");
-                JSONString.Append("\"ihzip2\":" + "\"" + drow["ihzip2"].ToString() + "\",");
-                JSONString.Append("\"ihhomephn2\":" + "\"" + drow["ihhomephn2"].ToString() + "\",");
-                JSONString.Append("\"ihworkphn2\":" + "\"" + drow["ihworkphn2"].ToString() + "\",");
-                JSONString.Append("\"ihdob2\":" + "\"" + drow["ihdob2"].ToString() + "\",");
-                JSONString.Append("\"ihsex2\":" + "\"" + drow["ihsex2"].ToString() + "\",");
-                JSONString.Append("\"ihssn2\":" + "\"" + drow["ihssn2"].ToString() + "\",");
-                JSONString.Append("\"hid2\":" + "\"" + drow["hid2"].ToString() + "\",");
-                JSONString.Append("\"ih2employer\":" + "\"" + drow["ih2employer"].ToString() + "\",");
-                JSONString.Append("\"ih2emplid\":" + "\"" + drow["ih2emplid"].ToString() + "\",");
-                JSONString.Append("\"ih2eaddr1\":" + "\"" + drow["ih2eaddr1"].ToString() + "\",");
-                JSONString.Append("\"ih2eaddr2\":" + "\"" + drow["ih2eaddr2"].ToString() + "\",");
-                JSONString.Append("\"ih2ecity\":" + "\"" + drow["ih2ecity"].ToString() + "\",");
-                JSONString.Append("\"ih2estate\":" + "\"" + drow["ih2estate"].ToString() + "\",");
-                JSONString.Append("\"ih2ezip\":" + "\"" + drow["ih2ezip"].ToString() + "\",");
-                JSONString.Append("\"ih2ephone\":" + "\"" + drow["ih2ephone"].ToString() + "\",");
-                JSONString.Append("\"ih2efax\":" + "\"" + drow["ih2efax"].ToString() + "\",");
-                JSONString.Append("\"original_ihworkphn1\":" + "\"" + drow["original_ihworkphn1"].ToString() + "\",");
-                JSONString.Append("\"original_ihhomephn1\":" + "\"" + drow["original_ihhomephn1"].ToString() + "\",");
-                JSONString.Append("\"original_ihworkphn2\":" + "\"" + drow["original_ihworkphn2"].ToString() + "\",");
-                JSONString.Append("\"original_ihhomephn2\":" + "\"" + drow["original_ihhomephn2"].ToString() + "\",");
-                JSONString.Append("\"ihcellphone1\":" + "\"" + drow["ihcellphone1"].ToString() + "\",");
-                JSONString.Append("\"ihcellphone2\":" + "\"" + drow["ihcellphone2"].ToString() + "\",");
-                JSONString.Append("\"icomments1\":" + "\"" + drow["icomments1"].ToString() + "\",");
-                JSONString.Append("\"icomments2\":" + "\"" + drow["icomments2"].ToString() + "\",");
-                JSONString.Append("\"Insurancetype\":" + "\"" + drow["Insurancetype"].ToString() + "\",");
-                JSONString.Append("\"Eligibilityreason\":" + "\"" + drow["Eligibilityreason"].ToString() + "\",");
-                JSONString.Append("\"Ircname\":" + "\"" + drow["Ircname"].ToString() + "\",");
-                JSONString.Append("\"Relationshiptoinsuredid\":" + "\"" + drow["Relationshiptoinsuredid"].ToString() + "\",");
-                JSONString.Append("\"Eligibilitymessage\":" + "\"" + drow["Eligibilitymessage"].ToString() + "\"");
-
-
-                if (counter == table.Rows.Count)
-                {
-                    JSONString.Append("}");
-                }
-                else
-                {
-                    JSONString.Append("},");
-                }
+                throw;
             }
-            JSONString.Append("]");
-            JSONString.Append("}");
-            return JSONString.ToString();
         }
     }
 }
