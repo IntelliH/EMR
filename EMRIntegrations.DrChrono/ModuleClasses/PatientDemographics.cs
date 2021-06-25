@@ -344,7 +344,9 @@ namespace EMRIntegrations.DrChrono
                 JSONString.Append("\"FacilityId\":" + "\"" + requestid + "\",");
                 JSONString.Append("\"StateId\":" + "\"\",");
                 JSONString.Append("\"EthnicityCode\":" + "\"" + mapEthnicity(drow["EthnicityCode"].ToString()) + "\",");
+                JSONString.Append("\"Ethnicity\":" + "\"" + mapEthnicity(drow["EthnicityCode"].ToString()) + "\",");
                 JSONString.Append("\"RaceCode\":" + "\"" + mapRace(drow["RaceCode"].ToString()) + "\",");
+                JSONString.Append("\"Race\":" + "\"" + mapRace(drow["RaceCode"].ToString()) + "\",");
                 JSONString.Append("\"DoctorId\":" + "\"" + drow["Doctor"].ToString() + "\",");
                 JSONString.Append("\"NPI\":" + "\"\",");
                 JSONString.Append("\"Status\":" + "\"\",");
