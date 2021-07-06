@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMRIntegrations.DrChrono", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMRIntegrations.EpicR4", "EMRIntegrations.EpicR4\EMRIntegrations.EpicR4.csproj", "{7939AA44-8821-4945-8329-8A61EB20AF18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMRIntegrations.Endpoints.WellSky", "EMRIntegrations.Endpoints.WellSky\EMRIntegrations.Endpoints.WellSky.csproj", "{18A9D6D0-3FB0-4DF2-A764-E1F68E59F103}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{7939AA44-8821-4945-8329-8A61EB20AF18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7939AA44-8821-4945-8329-8A61EB20AF18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7939AA44-8821-4945-8329-8A61EB20AF18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18A9D6D0-3FB0-4DF2-A764-E1F68E59F103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18A9D6D0-3FB0-4DF2-A764-E1F68E59F103}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18A9D6D0-3FB0-4DF2-A764-E1F68E59F103}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18A9D6D0-3FB0-4DF2-A764-E1F68E59F103}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

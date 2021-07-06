@@ -319,6 +319,10 @@
       <Project>{14577768-7066-4f15-b93c-a00b0fa4cc40}</Project>
       <Name>EMRIntegrations.DrChrono</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EMRIntegrations.Endpoints.WellSky\EMRIntegrations.Endpoints.WellSky.csproj">
+      <Project>{18a9d6d0-3fb0-4df2-a764-e1f68e59f103}</Project>
+      <Name>EMRIntegrations.Endpoints.WellSky</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EMRIntegrations.EpicR4\EMRIntegrations.EpicR4.csproj">
       <Project>{7939aa44-8821-4945-8329-8a61eb20af18}</Project>
       <Name>EMRIntegrations.EpicR4</Name>
